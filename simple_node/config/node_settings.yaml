@@ -17,51 +17,51 @@ a_talker:
       frequency: 50
       message: "Hello from name1"
 
-
+# hard rock band talkers and listeners
+# callback number is 12 for each talker and listener
 hard_rock_band_talker:
   type: talker
   executor_type: single_threaded
   callbacks:
     - topic: /led_zeppelin/message
       frequency: 10
-      message: "Hello from led zeppelin"
+      message: "Immigrant song from led zeppelin"
     - topic: /deep_purple/message
       frequency: 50
-      message: "Hello from deep purple"
+      message: "Highway star from deep purple"
     - topic: /pink_floyd/message
       frequency: 10
-      message: "Hello from pink floyd"
+      message: "Echoes from pink floyd"
     - topic: /queen/message
       frequency: 50
-      message: "Hello from queen"
+      message: "Killer queen from queen"
     - topic: /kiss/message
       frequency: 10
-      message: "Hello from kiss"
+      message: "Detroit rock city from kiss"
     - topic: /uriah_heep/message
       frequency: 50
-      message: "Hello from uriah heep"
+      message: "SALISBURY from uriah heep"
     - topic: /rainbow/message
       frequency: 10
-      message: "Hello from rainbow"
+      message: "Kill the Kint from rainbow"
     - topic: /scorpions/message
       frequency: 50
-      message: "Hello from the scorpions"
+      message: "Virgin killer from the scorpions"
     - topic: /thin_lizzy/message
       frequency: 10
-      message: "Hello from thin lizzy"
+      message: "Jailbreak from thin lizzy"
     - topic: /judas_priest/message
       frequency: 50
-      message: "Hello from judas priest"
+      message: "Breaking the law from judas priest"
     - topic: /ac_dc/message
       frequency: 10
-      message: "Hello from ac/dc"
+      message: "Back in Black from ac/dc"
     - topic: /aerosmith/message
       frequency: 50
-      message: "Hello from aerosmith"
+      message: "Miss a sing from aerosmith"
 
 hard_rock_band_listener:
   type: listener
-  silent: 1
   executor_type: single_threaded
   callbacks:
     - topic: /led_zeppelin/message
@@ -78,7 +78,8 @@ hard_rock_band_listener:
     - topic: /aerosmith/message
       
 
-
+# hard rock musicians talkers and listeners
+# callback number is 20 for each talker and listener
 hard_rock_musician_talker:
   type: talker
   executor_type: single_threaded
@@ -150,7 +151,6 @@ hard_rock_musician_talker:
 hard_rock_musician_listener:
   type: listener
   executor_type: single_threaded
-  silent: 1
   callbacks:
     - topic: /jimmy_page/message
     - topic: /robert_plant/message
@@ -174,10 +174,47 @@ hard_rock_musician_listener:
     - topic: /ace_frehley/message
     - topic: /peter_criss/message
 
-enonomist_talker:
+# economist listeners and talkers
+# callback number is 8 for each talker and listener
+economist_talker:
   type: talker
   executor_type: single_threaded
   callbacks:
-    - topic: /
+    - topic: /adam_smith/message
       frequency: 10
-      message: "Hello from economist"
+      message: "Unvisible hand"
+    - topic: /john_maynard_keynes/message
+      frequency: 50
+      message: "The general theory of employment, interest and money"
+    - topic: /milton_friedman/message
+      frequency: 10
+      message: "Monetary history and theory"
+    - topic: /karl_marx/message
+      frequency: 50
+      message: "Das Kapital"
+    - topic: /joseph_stiglitz/message
+      frequency: 10
+      message: "Globalization and its discontents"
+    - topic: /paul_krugman/message
+      frequency: 50
+      message: "The return of depression economics"
+    - topic: /thomas_piketty/message
+      frequency: 10
+      message: "Capital in the Twenty-First Century"
+    - topic: /friedrich_hayek/message
+      frequency: 50
+      message: "The Road to Serfdom"
+
+
+economist_listener:
+  type: listener
+  executor_type: single_threaded
+  callbacks:
+    - topic: /adam_smith/message
+    - topic: /john_maynard_keynes/message
+    - topic: /milton_friedman/message
+    - topic: /karl_marx/message
+    - topic: /joseph_stiglitz/message
+    - topic: /paul_krugman/message
+    - topic: /thomas_piketty/message
+    - topic: /friedrich_hayek/message

@@ -1,5 +1,6 @@
 import yaml # PyYAMLライブラリが必要です (pip install pyyaml)
 from launch import LaunchDescription
+from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -54,8 +55,11 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     
     # 処理するYAMLファイルパスを受け取るための引数を宣言
+    package_share_dir = get_package_share_directory('simple_node')
+    default_config_path = package_share_dir + '/config/node_settings.yaml'
     config_file_arg = DeclareLaunchArgument(
         'node_config_file',
+        default_value=default_config_path,
         description='Nodes to launch, described in a YAML file.'
     )
 
