@@ -1,4 +1,6 @@
-sample_talker:
+# 0: sample listener and talker
+# callback number is 2 for each talker and listener
+a_talker:
   type: talker
   executor_type: multi_threaded
   callbacks:
@@ -8,19 +10,51 @@ sample_talker:
     - topic: /topic/message/name1
       frequency: 10
       message: "Hello from name1"
+    - topic: /topic/message/name2
+      frequency: 10
+      message: "Hello from name2"
+    - topic: /topic/message/name3
+      frequency: 10
+      message: "Hello from name3"
+    - topic: /topic/message/name4
+      frequency: 10
+      message: "Hello from name4"
+    - topic: /topic/message/name5
+      frequency: 10
+      message: "Hello from name5"
+    - topic: /topic/message/name6
+      frequency: 10
+      message: "Hello from name6"
+    - topic: /topic/message/name7
+      frequency: 10
+      message: "Hello from name7"
+    - topic: /topic/message/name8
+      frequency: 10
+      message: "Hello from name8"
+    - topic: /topic/message/name9
+      frequency: 10
+      message: "Hello from name9"
 
-sample_listener:
+
+a_listener:
   type: listener
   executor_type: multi_threaded
   silent: true
   callbacks:
     - topic: /topic/message/name0
     - topic: /topic/message/name1
+    - topic: /topic/message/name2
+    - topic: /topic/message/name3
+    - topic: /topic/message/name4
+    - topic: /topic/message/name5
+    - topic: /topic/message/name6
+    - topic: /topic/message/name7
+    - topic: /topic/message/name8
+    - topic: /topic/message/name9
 
-
-
+# 1 : hard rock band #0
 # hard rock band talkers and listeners
-# callback number is 12 for each talker and listener
+# callback number is 10 for each talker and listener
 hard_rock_band_talker:
   type: talker
   executor_type: multi_threaded
@@ -55,12 +89,6 @@ hard_rock_band_talker:
     - topic: /judas_priest/message
       frequency: 10
       message: "Breaking the law from judas priest"
-    - topic: /ac_dc/message
-      frequency: 10
-      message: "Back in Black from ac/dc"
-    - topic: /aerosmith/message
-      frequency: 10
-      message: "Miss a sing from aerosmith"
 
 hard_rock_band_listener:
   type: listener
@@ -77,13 +105,65 @@ hard_rock_band_listener:
     - topic: /scorpions/message
     - topic: /thin_lizzy/message
     - topic: /judas_priest/message
+
+# 2 : hard rock band #1
+# hard rock band talkers and listeners
+# callback number is 10 for each talker and listener
+hard_rock_band_1_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /ac_dc/message
+      frequency: 10
+      message: "Back in Black from ac/dc"
+    - topic: /aerosmith/message
+      frequency: 10
+      message: "Miss a sing from aerosmith"
+    - topic: /black_sabbath/message
+      frequency: 10
+      message: "war pigs from black sabbath"
+    - topic: /grand_funk/message
+      frequency: 10
+      message: "We're an American band from grand funk railroad"
+    - topic: /alice_cooper/message
+      frequency: 10
+      message: "School's out from alice cooper"
+    - topic: /van_halen/message
+      frequency: 10
+      message: "Jump from van halen"
+    - topic: /alcatrazz/message
+      frequency: 10
+      message: "God bless the child from alcatrazz"
+    - topic: /def_leppard/message
+      frequency: 10
+      message: "Photograph from def leppard"
+    - topic: /motley_crue/message
+      frequency: 10
+      message: "Kickstart my heart from motley crue"
+    - topic: /guns_n_roses/message
+      frequency: 10
+      message: "Sweet child o' mine from guns n' roses"
+
+hard_rock_band_1_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
     - topic: /ac_dc/message
     - topic: /aerosmith/message
-      
+    - topic: /black_sabbath/message
+    - topic: /grand_funk/message
+    - topic: /alice_cooper/message
+    - topic: /van_halen/message
+    - topic: /alcatrazz/message
+    - topic: /def_leppard/message
+    - topic: /motley_crue/message
+    - topic: /guns_n_roses/message
 
+# 3: hard rock mucisians #0
 # hard rock musicians talkers and listeners
-# callback number is 20 for each talker and listener
-hard_rock_musician_talker:
+# callback number is 10 for each talker and listener
+hard_rock_musician_0_talker:
   type: talker
   executor_type: multi_threaded
   callbacks:
@@ -117,6 +197,31 @@ hard_rock_musician_talker:
     - topic: /david_gilmour/message
       frequency: 10
       message: "Hello from david gilmour"
+
+
+hard_rock_musician_0_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /jimmy_page/message
+    - topic: /robert_plant/message
+    - topic: /john_bonham/message
+    - topic: /john_paul_jones/message
+    - topic: /richie_blackmore/message
+    - topic: /ian_gillan/message
+    - topic: /roger_glover/message
+    - topic: /john_lord/message
+    - topic: /ian_paice/message
+    - topic: /david_gilmour/message
+
+# 4: hard rock musicians #1
+# hard rock musicians talkers and listeners
+# callback number is 10 for each talker and listener
+hard_rock_musician_1_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
     - topic: /roger_waters/message
       frequency: 10
       message: "Hello from roger waters"
@@ -151,21 +256,11 @@ hard_rock_musician_talker:
       frequency: 10
       message: "Hello from peter criss"
 
-hard_rock_musician_listener:
+hard_rock_musician_1_listener:
   type: listener
   executor_type: multi_threaded
   silent: true
   callbacks:
-    - topic: /jimmy_page/message
-    - topic: /robert_plant/message
-    - topic: /john_bonham/message
-    - topic: /john_paul_jones/message
-    - topic: /richie_blackmore/message
-    - topic: /ian_gillan/message
-    - topic: /roger_glover/message
-    - topic: /john_lord/message
-    - topic: /ian_paice/message
-    - topic: /david_gilmour/message
     - topic: /roger_waters/message
     - topic: /nick_mason/message
     - topic: /richard_wright/message
@@ -178,48 +273,3 @@ hard_rock_musician_listener:
     - topic: /ace_frehley/message
     - topic: /peter_criss/message
 
-# economist listeners and talkers
-# callback number is 8 for each talker and listener
-economist_talker:
-  type: talker
-  executor_type: multi_threaded
-  callbacks:
-    - topic: /adam_smith/message
-      frequency: 10
-      message: "Unvisible hand"
-    - topic: /john_maynard_keynes/message
-      frequency: 10
-      message: "The general theory of employment, interest and money"
-    - topic: /milton_friedman/message
-      frequency: 10
-      message: "Monetary history and theory"
-    - topic: /karl_marx/message
-      frequency: 10
-      message: "Das Kapital"
-    - topic: /joseph_stiglitz/message
-      frequency: 10
-      message: "Globalization and its discontents"
-    - topic: /paul_krugman/message
-      frequency: 10
-      message: "The return of depression economics"
-    - topic: /thomas_piketty/message
-      frequency: 10
-      message: "Capital in the Twenty-First Century"
-    - topic: /friedrich_hayek/message
-      frequency: 10
-      message: "The Road to Serfdom"
-
-
-economist_listener:
-  type: listener
-  executor_type: multi_threaded
-  silent: true
-  callbacks:
-    - topic: /adam_smith/message
-    - topic: /john_maynard_keynes/message
-    - topic: /milton_friedman/message
-    - topic: /karl_marx/message
-    - topic: /joseph_stiglitz/message
-    - topic: /paul_krugman/message
-    - topic: /thomas_piketty/message
-    - topic: /friedrich_hayek/message
