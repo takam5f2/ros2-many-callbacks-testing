@@ -438,7 +438,7 @@ heavy_metal_band_3_talker:
   executor_type: multi_threaded
   callbacks:
     - topic: /death/message
-      frequency: 100
+      frequency: 10
       message: "Symbolic from death"
     - topic: /cannibal_corpse/message
       frequency: 10
