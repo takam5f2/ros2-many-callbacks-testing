@@ -438,7 +438,7 @@ heavy_metal_band_3_talker:
   executor_type: multi_threaded
   callbacks:
     - topic: /death/message
-      frequency: 10
+      frequency: 100
       message: "Symbolic from death"
     - topic: /cannibal_corpse/message
       frequency: 10
@@ -467,3 +467,19 @@ heavy_metal_band_3_talker:
     - topic: /dismember/message
       frequency: 10
       message: "Skin Her Alive from dismember"
+
+heavy_metal_band_3_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /death/message
+    - topic: /cannibal_corpse/message
+    - topic: /obituary/message
+    - topic: /morbid_angel/message
+    - topic: /napalm_death/message
+    - topic: /carcass/message
+    - topic: /cynic/message
+    - topic: /at_the_gates/message
+    - topic: /entombed/message
+    - topic: /dismember/message
