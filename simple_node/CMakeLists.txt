@@ -16,7 +16,7 @@ find_package(yaml-cpp REQUIRED)
 #
 # Talkerライブラリの定義
 #
-add_library(simple_talker_lib src/simple_talker.cpp)
+add_library(simple_talker_lib SHARED src/simple_talker.cpp)
 
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_talker_lib
@@ -52,7 +52,7 @@ target_link_libraries(simple_talker
 )
 
 # Listenerライブラリの定義
-add_library(simple_listener_lib src/simple_listener.cpp)
+add_library(simple_listener_lib SHARED src/simple_listener.cpp)
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_listener_lib
   rclcpp
@@ -86,6 +86,14 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(TARGETS
+  simple_talker_lib
+  simple_listener_lib
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
 install(DIRECTORY include/
   DESTINATION include
 )
@@ -98,6 +106,10 @@ install(DIRECTORY config/
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
+
+ament_export_include_directories(include)
+ament_export_libraries(simple_talker_lib simple_listener_lib)
+ament_export_dependencies(rclcpp std_msgs yaml-cpp)
 
 # amentパッケージとして登録
 ament_package()

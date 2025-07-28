@@ -1,0 +1,65 @@
+executor_00:
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/message/name0
+        frequency: 10
+        message: "Hello from name0"
+  - node_name: "sample_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/message/name0
+
+
+executor_01:
+  executor_type: "multi_threaded_executor"
+  nodes:
+  - node_name: "simple_talker"
+    node_type: simple_talker
+    intra_process: true
+    callbacks:
+      - topic: /topic/message/name1
+        frequency: 10
+        message: "Hello from name1"
+  - node_name: "sample_listener"
+    node_type: simple_listener
+    intra_process: true
+    silent: true
+    callbacks:
+      - topic: /topic/message/name0
+      - topic: /topic/message/name1
+
+executor_02:
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/message/name2
+        frequency: 10
+        message: "Hello from name2"
+  - node_name: "another_simple_talker"
+    node_type: simple_talker
+    intra_process: true
+    callbacks:
+      - topic: /topic/message/name3
+        frequency: 10
+        message: "Hello from name3"
+  - node_name: "sample_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/message/name2
+  - node_name: "another_sample_listener"
+    node_type: simple_listener
+    intra_process: true
+    silent: true
+    callbacks:
+      - topic: /topic/message/name3
