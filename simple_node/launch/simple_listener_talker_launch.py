@@ -1,4 +1,4 @@
-import yaml # PyYAMLライブラリが必要です (pip install pyyaml)
+import yaml
 from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
