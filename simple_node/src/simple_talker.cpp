@@ -23,25 +23,47 @@ SimpleTalker::SimpleTalker(const std::string &node_name, const YAML::Node &confi
     auto topic = cb_config["topic"].as<std::string>();
     auto frequency = cb_config["frequency"].as<double>();
     auto message_text = cb_config["message"].as<std::string>();
+    auto launch = true; // Default to not silent
+    if (cb_config["launch"] && cb_config["launch"].IsScalar()) {
+      launch = cb_config["launch"].as<bool>();
+    }    
 
-    auto publisher = this->create_publisher<std_msgs::msg::String>(topic, 10);
-    publishers_.push_back(publisher);
-
-    publishing_counters_.push_back(static_cast<unsigned int>(0));
+    if (launch) {
+      auto publisher = this->create_publisher<std_msgs::msg::String>(topic, 10);
+      publishers_.push_back(publisher);
+      publishing_counters_.push_back(static_cast<unsigned int>(0));
     
-    auto timer_callback = [this, publisher, message_text, callback_idx]() -> void {
-      auto message = std_msgs::msg::String();
-      message.data = message_text + " " + std::to_string(publishing_counters_[callback_idx]++);
-      publisher->publish(message);
-    };
-    
-    auto timer = this->create_wall_timer(
-      std::chrono::duration<double>(1.0 / frequency),
-      timer_callback
-    );
-    timers_.push_back(timer);
+      auto timer_callback = [this, publisher, message_text, callback_idx]() -> void {
+        auto message = std_msgs::msg::String();
+        message.data = message_text + " " + std::to_string(publishing_counters_[callback_idx]++);
+        publisher->publish(message);
+      };
 
-    RCLCPP_INFO(this->get_logger(), "Publishing to '%s' at %f Hz", topic.c_str(), frequency);
+      auto timer = this->create_wall_timer(
+        std::chrono::duration<double>(1.0 / frequency),
+        timer_callback
+      );
+      timers_.push_back(timer);
+
+      RCLCPP_INFO(this->get_logger(), "Publishing to '%s' at %f Hz", topic.c_str(), frequency);
+
+    } else {
+      publishing_counters_.push_back(static_cast<unsigned int>(0));
+
+      auto timer_callback = [this, topic, message_text, callback_idx]() -> void
+      {
+        publishing_counters_[callback_idx]++;
+      };
+
+      auto timer = this->create_wall_timer(
+        std::chrono::duration<double>(1.0 / frequency),
+        timer_callback
+      );
+      timers_.push_back(timer);
+
+      RCLCPP_INFO(this->get_logger(), "Timer for '%s' set at %f Hz but not publishing messages", topic.c_str(), frequency);
+    }
+
     callback_idx++;
   }
 }

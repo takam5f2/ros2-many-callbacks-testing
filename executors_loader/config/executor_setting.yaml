@@ -8,6 +8,7 @@ executor_00:
       - topic: /topic/message/name0
         frequency: 10
         message: "Hello from name0"
+        launch: false
   - node_name: "sample_listener"
     node_type: simple_listener
     intra_process: false
@@ -26,6 +27,7 @@ executor_01:
       - topic: /topic/message/name1
         frequency: 10
         message: "Hello from name1"
+        launch: false
   - node_name: "sample_listener"
     node_type: simple_listener
     intra_process: true
@@ -44,6 +46,7 @@ executor_02:
       - topic: /topic/message/name2
         frequency: 10
         message: "Hello from name2"
+        launch: false
   - node_name: "another_simple_talker"
     node_type: simple_talker
     intra_process: true
@@ -51,6 +54,7 @@ executor_02:
       - topic: /topic/message/name3
         frequency: 10
         message: "Hello from name3"
+        launch: false
   - node_name: "sample_listener"
     node_type: simple_listener
     intra_process: false
