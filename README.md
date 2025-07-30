@@ -8,8 +8,8 @@ However, it is difficult to estimate the resources consumed by the ROS 2 runtime
 
 
 ```
-git clone git@github.com:takam5f2/ros2-many-callback-testing.git
-cd ros2-many-callback-testing
+git clone git@github.com:takam5f2/ros2-many-callbacks-testing.git
+cd ros2-many-callbacks-testing
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --packages-up-to executors_loader
 source install/setup.bash
 ros2 launch executors_loader many_executors_loader.launch.py
