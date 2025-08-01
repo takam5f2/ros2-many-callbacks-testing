@@ -1,0 +1,344 @@
+# 0: sample listener and talker
+# callback number is 2 for each talker and listener
+a_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /topic/message/name0
+      frequency: 10
+      message: "Hello from name0"
+    - topic: /topic/message/name1
+      frequency: 10
+      message: "Hello from name1"
+    - topic: /topic/message/name2
+      frequency: 10
+      message: "Hello from name2"
+    - topic: /topic/message/name3
+      frequency: 10
+      message: "Hello from name3"
+    - topic: /topic/message/name4
+      frequency: 10
+      message: "Hello from name4"
+
+
+a_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /topic/message/name0
+    - topic: /topic/message/name1
+    - topic: /topic/message/name2
+    - topic: /topic/message/name3
+    - topic: /topic/message/name4
+
+# 1 : hard rock band #0
+# hard rock band talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_band_0_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /led_zeppelin/message
+      frequency: 10
+      message: "Immigrant song from led zeppelin"
+    - topic: /deep_purple/message
+      frequency: 10
+      message: "Highway star from deep purple"
+    - topic: /pink_floyd/message
+      frequency: 10
+      message: "Echoes from pink floyd"
+    - topic: /queen/message
+      frequency: 10
+      message: "Killer queen from queen"
+    - topic: /kiss/message
+      frequency: 10
+      message: "Detroit rock city from kiss"
+
+
+hard_rock_band_0_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /led_zeppelin/message
+    - topic: /deep_purple/message
+    - topic: /pink_floyd/message
+    - topic: /queen/message
+    - topic: /kiss/message
+
+# 2 : hard rock band #2
+# hard rock band talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_band_1_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /uriah_heep/message
+      frequency: 10
+      message: "SALISBURY from uriah heep"
+    - topic: /rainbow/message
+      frequency: 10
+      message: "Kill the King from rainbow"
+    - topic: /scorpions/message
+      frequency: 10
+      message: "Virgin killer from the scorpions"
+    - topic: /thin_lizzy/message
+      frequency: 10
+      message: "Jailbreak from thin lizzy"
+    - topic: /michael_schenker_group/message
+      frequency: 10
+      message: "Doctor Doctor from michael schenker group"
+
+hard_rock_band_1_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /uriah_heep/message
+    - topic: /rainbow/message
+    - topic: /scorpions/message
+    - topic: /thin_lizzy/message
+    - topic: /michael_schenker_group/message
+
+
+# 3 : hard rock band #3
+# hard rock band talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_band_2_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /ac_dc/message
+      frequency: 10
+      message: "Back in Black from ac/dc"
+    - topic: /aerosmith/message
+      frequency: 10
+      message: "Miss a sing from aerosmith"
+    - topic: /black_sabbath/message
+      frequency: 10
+      message: "war pigs from black sabbath"
+    - topic: /grand_funk/message
+      frequency: 10
+      message: "We're an American band from grand funk railroad"
+    - topic: /alice_cooper/message
+      frequency: 10
+      message: "School's out from alice cooper"
+
+hard_rock_band_2_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /ac_dc/message
+    - topic: /aerosmith/message
+    - topic: /black_sabbath/message
+    - topic: /grand_funk/message
+    - topic: /alice_cooper/message      
+
+# 4 : hard rock musicians #0
+# hard rock musicians talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_musician_0_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /jimmy_page/message
+      frequency: 10
+      message: "Hello from jimmy page"
+    - topic: /robert_plant/message
+      frequency: 10
+      message: "Hello from robert plant"
+    - topic: /john_bonham/message
+      frequency: 10
+      message: "Hello from john bonham"
+    - topic: /john_paul_jones/message
+      frequency: 10
+      message: "Hello from john paul jones"
+    - topic: /richie_blackmore/message
+      frequency: 10
+      message: "Hello from richie blackmore"
+
+
+hard_rock_musician_0_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /jimmy_page/message
+    - topic: /robert_plant/message
+    - topic: /john_bonham/message
+    - topic: /john_paul_jones/message
+    - topic: /richie_blackmore/message
+
+# 5 : hard rock musicians #1
+# hard rock musicians talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_musician_1_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /ian_gillan/message
+      frequency: 10
+      message: "Hello from ian gillan"
+    - topic: /roger_glover/message
+      frequency: 10
+      message: "Hello from roger glover"
+    - topic: /john_lord/message
+      frequency: 10
+      message: "Hello from john lord"
+    - topic: /ian_paice/message
+      frequency: 10
+      message: "Hello from ian paice"
+    - topic: /david_gilmour/message
+      frequency: 10
+      message: "Hello from david gilmour"
+
+hard_rock_musician_1_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /ian_gillan/message
+    - topic: /roger_glover/message
+    - topic: /john_lord/message
+    - topic: /ian_paice/message
+    - topic: /david_gilmour/message
+
+
+# 6 : hard rock musicians #2
+# hard rock musicians talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_musician_2_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /roger_waters/message
+      frequency: 10
+      message: "Hello from roger waters"
+    - topic: /nick_mason/message
+      frequency: 10
+      message: "Hello from nick mason"
+    - topic: /richard_wright/message
+      frequency: 10
+      message: "Hello from richard wright"
+    - topic: /freddie_mercury/message
+      frequency: 10
+      message: "Hello from freddie mercury"
+    - topic: /brian_may/message
+      frequency: 10
+      message: "Hello from brian may"
+
+hard_rock_musician_2_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /roger_waters/message
+    - topic: /nick_mason/message
+    - topic: /richard_wright/message
+    - topic: /freddie_mercury/message
+    - topic: /brian_may/message
+
+# 7 : hard rock musicians #3
+# hard rock musicians talkers and listeners
+# callback number is 5 for each talker and listener
+hard_rock_musician_3_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /roger_taylor/message
+      frequency: 10
+      message: "Hello from roger taylor"
+    - topic: /john_deacon/message
+      frequency: 10
+      message: "Hello from john deacon"
+    - topic: /gene_simmons/message
+      frequency: 10
+      message: "Hello from gene simmons"
+    - topic: /paul_stanley/message
+      frequency: 10
+      message: "Hello from paul stanley"
+    - topic: /ace_frehley/message
+      frequency: 10
+      message: "Hello from ace frehley"
+
+hard_rock_musician_3_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /roger_taylor/message
+    - topic: /john_deacon/message
+    - topic: /gene_simmons/message
+    - topic: /paul_stanley/message
+    - topic: /ace_frehley/message
+
+#8 : heavy metal bands #0
+# heavy metal bands talkers and listeners
+# callback number is 5 for each talker and listener
+heavy_metal_band_0_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /metallica/message
+      frequency: 10
+      message: "Enter Sandman from metallica"
+    - topic: /megadeth/message
+      frequency: 10
+      message: "Peace Sells from megadeth"
+    - topic: /slayer/message
+      frequency: 10
+      message: "Raining Blood from slayer"
+    - topic: /anthrax/message
+      frequency: 10
+      message: "Madhouse from anthrax"
+    - topic: /testament/message
+      frequency: 10
+      message: "Into the Pit from testament"
+
+heavy_metal_band_0_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /metallica/message
+    - topic: /megadeth/message
+    - topic: /slayer/message
+    - topic: /anthrax/message
+    - topic: /testament/message
+
+#9 : heavy metal bands #1
+# heavy metal bands talkers and listeners
+# callback number is 5 for each talker and listener
+heavy_metal_band_1_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /iron_maiden/message
+      frequency: 10
+      message: "Hallowed be thy name from iron maiden"
+    - topic: /saxon/message
+      frequency: 10
+      message: "Wheels of Steel from saxon"
+    - topic: /white_lion/message
+      frequency: 10
+      message: "Rock You to the Top from white lion"
+    - topic: /judas_priest/message
+      frequency: 10
+      message: "Painkiller from judas priest"
+    - topic: /helloween/message
+      frequency: 10
+      message: "I Want Out from helloween"
+
+heavy_metal_band_1_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /iron_maiden/message
+    - topic: /saxon/message
+    - topic: /white_lion/message
+    - topic: /judas_priest/message
+    - topic: /helloween/message
+

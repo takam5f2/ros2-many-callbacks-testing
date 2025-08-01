@@ -1,0 +1,16 @@
+# 0: sample listener and talker
+# callback number is 2 for each talker and listener
+a_talker:
+  type: talker
+  executor_type: single_threaded
+  callbacks:
+    - topic: /topic/message/name0
+      frequency: 10
+      message: "Hello from name0"
+
+a_listener:
+  type: listener
+  executor_type: single_threaded
+  silent: true
+  callbacks:
+    - topic: /topic/message/name0
