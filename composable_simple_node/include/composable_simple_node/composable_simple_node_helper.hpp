@@ -14,7 +14,6 @@ namespace composable_simple_node
     node->declare_parameter<std::string>("node_config_file", "config.yaml");
     std::string node_config_file;
     node->get_parameter("node_config_file", node_config_file);
-    RCLCPP_INFO(node->get_logger(), "Loading YAML config from: %s", node_config_file.c_str());
 
     try {
       YAML::Node config = YAML::LoadFile(node_config_file);
