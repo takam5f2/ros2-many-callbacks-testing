@@ -12,13 +12,15 @@ namespace simple_node
 class SimpleListener : public rclcpp::Node
 {
 public:
-  SimpleListener(const std::string &node_name, const YAML::Node &config,
+  SimpleListener(const std::string &default_node_name, const YAML::Node &config = YAML::Node(),
                  const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
   virtual ~SimpleListener() override;
+  int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
   std::vector<rclcpp::Subscription<std_msgs::msg::String>::SharedPtr> subscribers_;
   std::vector<unsigned int> receiving_counters_;
+  bool already_initialized_ = false;
 };
 }
 

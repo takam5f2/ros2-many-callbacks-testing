@@ -6,15 +6,33 @@
 namespace simple_node
 {
 
-SimpleTalker::SimpleTalker(const std::string &node_name, const YAML::Node &config,
+SimpleTalker::SimpleTalker(const std::string &default_node_name, const YAML::Node &config,
                            const rclcpp::NodeOptions &options)
-  : Node(node_name, options)
+  : Node(default_node_name, options)
 {
+  std::string node_name = this->get_name();
+
   RCLCPP_INFO(this->get_logger(), "%s node has been created.", node_name.c_str());
+
+  init(config);
+}
+
+SimpleTalker::~SimpleTalker()
+{
+  RCLCPP_INFO(this->get_logger(), "SimpleTalker node is being destroyed.");
+}
+
+int SimpleTalker::init(const YAML::Node &config)
+{
+  if (already_initialized_) {
+    return -1;
+  }
+
+  std::string node_name = this->get_name();
 
   if (!config["callbacks"] || !config["callbacks"].IsSequence()) {
     RCLCPP_ERROR(this->get_logger(), "No 'callbacks' sequence found for node '%s'", node_name.c_str());
-    return;
+    return -1;
   }
 
   unsigned int callback_idx = 0;
@@ -66,11 +84,8 @@ SimpleTalker::SimpleTalker(const std::string &node_name, const YAML::Node &confi
 
     callback_idx++;
   }
-}
 
-SimpleTalker::~SimpleTalker()
-{
-  RCLCPP_INFO(this->get_logger(), "SimpleTalker node is being destroyed.");
+  already_initialized_ = true;
+  return 0;
 }
-
 }

@@ -5,15 +5,32 @@
 
 namespace simple_node
 {
-SimpleListener::SimpleListener(const std::string &node_name, const YAML::Node &config,
+SimpleListener::SimpleListener(const std::string &default_node_name, const YAML::Node &config,
                                const rclcpp::NodeOptions &options)
-  : Node(node_name, options)
+  : Node(default_node_name, options)
 {
+  std::string node_name = this->get_name();
+
   RCLCPP_INFO(this->get_logger(), "%s node has been created.", node_name.c_str());
 
+  init(config);
+}
+
+SimpleListener::~SimpleListener()
+{
+  RCLCPP_INFO(this->get_logger(), "SimpleListener node is being destroyed.");
+}
+
+int SimpleListener::init(const YAML::Node &config)
+{
+  if (already_initialized_) {
+    return -1;
+  }
+
+  std::string node_name = this->get_name();
   if (!config["callbacks"] || !config["callbacks"].IsSequence()) {
     RCLCPP_ERROR(this->get_logger(), "No 'callbacks' sequence found for node '%s'", node_name.c_str());
-    return;
+    return -1;
   }
 
   unsigned int callback_idx = 0;
@@ -41,11 +58,8 @@ SimpleListener::SimpleListener(const std::string &node_name, const YAML::Node &c
     subscribers_.push_back(subscriber);
     callback_idx++;
   }
-}
-SimpleListener::~SimpleListener()
-{
-  RCLCPP_INFO(this->get_logger(), "SimpleListener node is being destroyed.");
-}
+  already_initialized_ = true;
+  return 0;
+}  
 
 } // namespace simple_node
-
