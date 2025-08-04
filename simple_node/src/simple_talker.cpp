@@ -24,8 +24,8 @@ SimpleTalker::~SimpleTalker()
 
 int SimpleTalker::init(const YAML::Node &config)
 {
-  if (already_initialized_) {
-    return -1;
+  if (publishers_.size() > 0 || timers_.size() > 0) {
+    return -1; // Already initialized
   }
 
   std::string node_name = this->get_name();
@@ -85,7 +85,6 @@ int SimpleTalker::init(const YAML::Node &config)
     callback_idx++;
   }
 
-  already_initialized_ = true;
   return 0;
 }
 }

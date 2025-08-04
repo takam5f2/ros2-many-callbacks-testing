@@ -18,9 +18,8 @@ public:
   int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
-  std::vector<rclcpp::Subscription<std_msgs::msg::String>::SharedPtr> subscribers_;
-  std::vector<unsigned int> receiving_counters_;
-  bool already_initialized_ = false;
+  std::vector<rclcpp::Subscription<std_msgs::msg::String>::SharedPtr> subscribers_{};
+  std::vector<unsigned int> receiving_counters_{};
 };
 }
 

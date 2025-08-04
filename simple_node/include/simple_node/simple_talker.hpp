@@ -18,11 +18,10 @@ public:
   int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
-  std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_;
+  std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_{};
   // Multiple timers for different IDs by std::vector
-  std::vector<rclcpp::TimerBase::SharedPtr> timers_;
-  std::vector<unsigned int> publishing_counters_; // Store frequencies for each timer
-  bool already_initialized_ = false;
+  std::vector<rclcpp::TimerBase::SharedPtr> timers_{};
+  std::vector<unsigned int> publishing_counters_{}; // Store frequencies for each timer
 };
 }
 

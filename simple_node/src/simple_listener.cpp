@@ -23,7 +23,7 @@ SimpleListener::~SimpleListener()
 
 int SimpleListener::init(const YAML::Node &config)
 {
-  if (already_initialized_) {
+  if (subscribers_.size() > 0) {
     return -1;
   }
 
@@ -58,7 +58,6 @@ int SimpleListener::init(const YAML::Node &config)
     subscribers_.push_back(subscriber);
     callback_idx++;
   }
-  already_initialized_ = true;
   return 0;
 }  
 
