@@ -1,0 +1,225 @@
+sample_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /topic/message/name0
+      frequency: 10
+      message: "Hello from name0"
+    - topic: /topic/message/name1
+      frequency: 10
+      message: "Hello from name1"
+
+sample_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /topic/message/name0
+    - topic: /topic/message/name1
+
+
+
+# hard rock band talkers and listeners
+# callback number is 12 for each talker and listener
+hard_rock_band_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /led_zeppelin/message
+      frequency: 10
+      message: "Immigrant song from led zeppelin"
+    - topic: /deep_purple/message
+      frequency: 10
+      message: "Highway star from deep purple"
+    - topic: /pink_floyd/message
+      frequency: 10
+      message: "Echoes from pink floyd"
+    - topic: /queen/message
+      frequency: 10
+      message: "Killer queen from queen"
+    - topic: /kiss/message
+      frequency: 10
+      message: "Detroit rock city from kiss"
+    - topic: /uriah_heep/message
+      frequency: 10
+      message: "SALISBURY from uriah heep"
+    - topic: /rainbow/message
+      frequency: 10
+      message: "Kill the Kint from rainbow"
+    - topic: /scorpions/message
+      frequency: 10
+      message: "Virgin killer from the scorpions"
+    - topic: /thin_lizzy/message
+      frequency: 10
+      message: "Jailbreak from thin lizzy"
+    - topic: /judas_priest/message
+      frequency: 10
+      message: "Breaking the law from judas priest"
+    - topic: /ac_dc/message
+      frequency: 10
+      message: "Back in Black from ac/dc"
+    - topic: /aerosmith/message
+      frequency: 10
+      message: "Miss a sing from aerosmith"
+
+hard_rock_band_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /led_zeppelin/message
+    - topic: /deep_purple/message
+    - topic: /pink_floyd/message
+    - topic: /queen/message
+    - topic: /kiss/message
+    - topic: /uriah_heep/message
+    - topic: /rainbow/message
+    - topic: /scorpions/message
+    - topic: /thin_lizzy/message
+    - topic: /judas_priest/message
+    - topic: /ac_dc/message
+    - topic: /aerosmith/message
+      
+
+# hard rock musicians talkers and listeners
+# callback number is 20 for each talker and listener
+hard_rock_musician_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /jimmy_page/message
+      frequency: 10
+      message: "Hello from jimmy page"
+    - topic: /robert_plant/message
+      frequency: 10
+      message: "Hello from robert plant"
+    - topic: /john_bonham/message
+      frequency: 10
+      message: "Hello from john bonham"
+    - topic: /john_paul_jones/message
+      frequency: 10
+      message: "Hello from john paul jones"
+    - topic: /richie_blackmore/message
+      frequency: 10
+      message: "Hello from richie blackmore"
+    - topic: /ian_gillan/message
+      frequency: 10
+      message: "Hello from ian gillan"
+    - topic: /roger_glover/message
+      frequency: 10
+      message: "Hello from roger glover"
+    - topic: /john_lord/message
+      frequency: 10
+      message: "Hello from john lord"
+    - topic: /ian_paice/message
+      frequency: 10
+      message: "Hello from ian paice"
+    - topic: /david_gilmour/message
+      frequency: 10
+      message: "Hello from david gilmour"
+    - topic: /roger_waters/message
+      frequency: 10
+      message: "Hello from roger waters"
+    - topic: /nick_mason/message
+      frequency: 10
+      message: "Hello from nick mason"
+    - topic: /richard_wright/message  
+      frequency: 10
+      message: "Hello from richard wright"
+    - topic: /freddie_mercury/message
+      frequency: 10
+      message: "Hello from freddie mercury"
+    - topic: /brian_may/message
+      frequency: 10
+      message: "Hello from brian may"
+    - topic: /roger_taylor/message
+      frequency: 10
+      message: "Hello from roger taylor"
+    - topic: /john_deacon/message
+      frequency: 10
+      message: "Hello from john deacon"
+    - topic: /gene_simmons/message
+      frequency: 10
+      message: "Hello from gene simmons"
+    - topic: /paul_stanley/message
+      frequency: 10
+      message: "Hello from paul stanley"
+    - topic: /ace_frehley/message
+      frequency: 10
+      message: "Hello from ace frehley"
+    - topic: /peter_criss/message
+      frequency: 10
+      message: "Hello from peter criss"
+
+hard_rock_musician_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /jimmy_page/message
+    - topic: /robert_plant/message
+    - topic: /john_bonham/message
+    - topic: /john_paul_jones/message
+    - topic: /richie_blackmore/message
+    - topic: /ian_gillan/message
+    - topic: /roger_glover/message
+    - topic: /john_lord/message
+    - topic: /ian_paice/message
+    - topic: /david_gilmour/message
+    - topic: /roger_waters/message
+    - topic: /nick_mason/message
+    - topic: /richard_wright/message
+    - topic: /freddie_mercury/message
+    - topic: /brian_may/message
+    - topic: /roger_taylor/message
+    - topic: /john_deacon/message
+    - topic: /gene_simmons/message
+    - topic: /paul_stanley/message
+    - topic: /ace_frehley/message
+    - topic: /peter_criss/message
+
+# economist listeners and talkers
+# callback number is 8 for each talker and listener
+economist_talker:
+  type: talker
+  executor_type: multi_threaded
+  callbacks:
+    - topic: /adam_smith/message
+      frequency: 10
+      message: "Unvisible hand"
+    - topic: /john_maynard_keynes/message
+      frequency: 10
+      message: "The general theory of employment, interest and money"
+    - topic: /milton_friedman/message
+      frequency: 10
+      message: "Monetary history and theory"
+    - topic: /karl_marx/message
+      frequency: 10
+      message: "Das Kapital"
+    - topic: /joseph_stiglitz/message
+      frequency: 10
+      message: "Globalization and its discontents"
+    - topic: /paul_krugman/message
+      frequency: 10
+      message: "The return of depression economics"
+    - topic: /thomas_piketty/message
+      frequency: 10
+      message: "Capital in the Twenty-First Century"
+    - topic: /friedrich_hayek/message
+      frequency: 10
+      message: "The Road to Serfdom"
+
+
+economist_listener:
+  type: listener
+  executor_type: multi_threaded
+  silent: true
+  callbacks:
+    - topic: /adam_smith/message
+    - topic: /john_maynard_keynes/message
+    - topic: /milton_friedman/message
+    - topic: /karl_marx/message
+    - topic: /joseph_stiglitz/message
+    - topic: /paul_krugman/message
+    - topic: /thomas_piketty/message
+    - topic: /friedrich_hayek/message
