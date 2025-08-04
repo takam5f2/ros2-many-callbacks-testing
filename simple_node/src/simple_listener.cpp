@@ -13,7 +13,9 @@ SimpleListener::SimpleListener(const std::string &default_node_name, const YAML:
 
   RCLCPP_INFO(this->get_logger(), "%s node has been created.", node_name.c_str());
 
-  init(config);
+  if ( config["callbacks"] && config["callbacks"].IsSequence() ) {
+    init(config);
+  }
 }
 
 SimpleListener::~SimpleListener()
