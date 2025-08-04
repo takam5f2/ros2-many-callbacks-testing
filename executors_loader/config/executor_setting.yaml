@@ -83,7 +83,7 @@ composable_executor_00:
       - topic: /topic/message/composable_name0
         frequency: 10
         message: "Hello from composable_name0"
-        launch: false
+        launch: true
   - node_name: "composable_simple_listener"
     node_type: simple_listener
     intra_process: true
@@ -102,7 +102,7 @@ composable_executor_01:
       - topic: /topic/message/composable_name1
         frequency: 10
         message: "Hello from composable_name1"
-        launch: false
+        launch: true
   - node_name: "composable_simple_listener"
     node_type: simple_listener
     intra_process: true
