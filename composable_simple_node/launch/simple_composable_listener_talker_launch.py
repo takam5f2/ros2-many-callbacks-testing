@@ -55,11 +55,12 @@ def launch_setup(context, *args, **kwargs):
     # 4. ComposableNodeContainerを作成し、上記のノードを登録
     container = ComposableNodeContainer(
         name='composable_node_container',
-        namespace='',
+        namespace='/composable_nodes',
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=nodes_to_launch,
         output='screen',
+        prefix=['xterm -e gdb -ex run --args' ],
     )
 
     # Nodeオブジェクトのリストを返す

@@ -35,6 +35,10 @@ ament_target_dependencies(composable_simple_talker
   simple_node
 )
 
+target_link_libraries(composable_simple_talker
+  yaml-cpp
+)
+
 rclcpp_components_register_nodes(composable_simple_talker "composable_simple_node::ComposableSimpleTalker")
 
 #
@@ -55,6 +59,10 @@ ament_target_dependencies(composable_simple_listener
   std_msgs
   yaml-cpp
   simple_node
+)
+
+target_link_libraries(composable_simple_listener
+  yaml-cpp
 )
 
 rclcpp_components_register_nodes(composable_simple_listener "composable_simple_node::ComposableSimpleListener")

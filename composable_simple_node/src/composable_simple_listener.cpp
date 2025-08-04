@@ -12,7 +12,7 @@ class ComposableSimpleListener : public simple_node::SimpleListener
 {
 public:
   explicit ComposableSimpleListener(const rclcpp::NodeOptions &options): 
-    SimpleListener(this->get_name(), load_yaml_config(this), options)
+    SimpleListener()
   {
   }
 };
