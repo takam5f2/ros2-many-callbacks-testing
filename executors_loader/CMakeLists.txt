@@ -10,6 +10,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(simple_node REQUIRED)
+find_package(composable_simple_node REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 
@@ -24,6 +25,7 @@ ament_target_dependencies(executors_loader
   rclcpp
   yaml-cpp
   simple_node
+  composable_simple_node
 )
 
 target_link_libraries(executors_loader
