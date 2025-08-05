@@ -12,15 +12,16 @@ namespace simple_node
 class SimpleTalker : public rclcpp::Node
 {
 public:
-  SimpleTalker(const std::string &node_name, const YAML::Node &config,
+  SimpleTalker(const std::string &default_node_name, const YAML::Node &config = YAML::Node(),
                const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
   virtual ~SimpleTalker() override;
+  int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
-  std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_;
+  std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_{};
   // Multiple timers for different IDs by std::vector
-  std::vector<rclcpp::TimerBase::SharedPtr> timers_;
-  std::vector<unsigned int> publishing_counters_; // Store frequencies for each timer
+  std::vector<rclcpp::TimerBase::SharedPtr> timers_{};
+  std::vector<unsigned int> publishing_counters_{}; // Store frequencies for each timer
 };
 }
 
