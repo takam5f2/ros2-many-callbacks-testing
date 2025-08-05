@@ -74,7 +74,7 @@ executor_02:
 # Compsable nodes configuration.
 composable_executor_00:
   use_composable_nodes: true
-  executor_type: "multi_threaded_executor"
+  executor_type: "single_threaded_executor"
   nodes:
   - node_name: "composable_simple_talker"
     node_type: simple_talker
