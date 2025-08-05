@@ -8,6 +8,17 @@ from launch_ros.descriptions import ComposableNode
 
 
 def get_component_container(executor_name, executor_property, config_file_path):
+  # executor_propertyからスレッド数と実行可能ファイルを取得
+  thread_num = 0
+  executable = 'component_container'
+  executor_type = executor_property.get('executor_type', 'single_threaded_executor')
+  if executor_type == 'single_threaded_executor':
+      thread_num = 1
+      executable = 'component_container'
+  else:
+      thread_num = 0
+      executable = 'component_container_mt'
+
   node_list = []
   for node in executor_property['nodes']:
         node_name = node['node_name']
@@ -38,8 +49,9 @@ def get_component_container(executor_name, executor_property, config_file_path):
   return ComposableNodeContainer(
       name=executor_name + '_container',
       namespace=executor_name,
+      executable=executable,
       package='rclcpp_components',
-      executable='component_container',
+      arguments=['--executor-threads', str(thread_num)],
       composable_node_descriptions=node_list,
       output='screen',
   )
