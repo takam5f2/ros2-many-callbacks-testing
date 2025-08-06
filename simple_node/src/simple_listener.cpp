@@ -12,6 +12,9 @@ SimpleListener::SimpleListener(const std::string &default_node_name, const YAML:
   std::string node_name = this->get_name();
 
   RCLCPP_INFO(this->get_logger(), "%s node has been created.", node_name.c_str());
+  if (options.use_intra_process_comms()) {
+    RCLCPP_INFO(this->get_logger(), "Intra-process communication is enabled for node '%s'.", node_name.c_str());
+  }
 
   if ( config["callbacks"] && config["callbacks"].IsSequence() ) {
     init(config);

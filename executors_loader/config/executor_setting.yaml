@@ -9,7 +9,7 @@ executor_00:
       - topic: /topic/message/name0
         frequency: 10
         message: "Hello from name0"
-        launch: false
+        launch: true
   - node_name: "simple_listener"
     node_type: simple_listener
     intra_process: false
@@ -26,17 +26,17 @@ executor_01:
     node_type: simple_talker
     intra_process: true
     callbacks:
-      - topic: /topic/message/name1
+      - topic: /topic/intra_process/message/name1
         frequency: 10
-        message: "Hello from name1"
-        launch: false
+        message: "Hello from name1 via shared memory"
+        launch: true
   - node_name: "simple_listener"
     node_type: simple_listener
     intra_process: true
     silent: true
     callbacks:
       - topic: /topic/message/name0
-      - topic: /topic/message/name1
+      - topic: /topic/intra_process/message/name1
 
 executor_02:
   use_composable_nodes: false
@@ -46,10 +46,10 @@ executor_02:
     node_type: simple_talker
     intra_process: false
     callbacks:
-      - topic: /topic/message/name2
+      - topic: /topic/intra_process/message/name2
         frequency: 10
-        message: "Hello from name2"
-        launch: false
+        message: "Hello from name2 via shared memory"
+        launch: true
   - node_name: "another_simple_talker"
     node_type: simple_talker
     intra_process: true
@@ -63,7 +63,7 @@ executor_02:
     intra_process: false
     silent: true
     callbacks:
-      - topic: /topic/message/name2
+      - topic: /topic/intra_process/message/name2
   - node_name: "another_simple_listener"
     node_type: simple_listener
     intra_process: true
@@ -78,15 +78,15 @@ composable_executor_00:
   nodes:
   - node_name: "composable_simple_talker"
     node_type: simple_talker
-    intra_process: true
+    intra_process: false
     callbacks:
       - topic: /topic/message/composable_name0
-        frequency: 10
+        frequency: 1
         message: "Hello from composable_name0"
         launch: true
   - node_name: "composable_simple_listener"
     node_type: simple_listener
-    intra_process: true
+    intra_process: false
     silent: true
     callbacks:
       - topic: /topic/message/composable_name0
@@ -99,27 +99,27 @@ composable_executor_01:
     node_type: simple_talker
     intra_process: true
     callbacks:
-      - topic: /topic/message/composable_name1
-        frequency: 10
-        message: "Hello from composable_name1"
+      - topic: /topic/intra_process/message/composable_name1
+        frequency: 1
+        message: "Hello from composable_name1 via shared memory"
         launch: true
   - node_name: "composable_simple_listener"
     node_type: simple_listener
     intra_process: true
-    silent: true
+    silent: false
     callbacks:
       - topic: /topic/message/composable_name0
-      - topic: /topic/message/composable_name1
+      - topic: /topic/intra_process/message/composable_name1
   - node_name: "another_composable_simple_talker"
     node_type: simple_talker
-    intra_process: true
+    intra_process: false
     callbacks:
       - topic: /topic/message/composable_name2
         frequency: 10
         message: "Hello from composable_name2"
   - node_name: "another_composable_simple_listener"
     node_type: simple_listener
-    intra_process: true
+    intra_process: false
     silent: true
     callbacks:
       - topic: /topic/message/composable_name2
