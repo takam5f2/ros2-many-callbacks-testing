@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>executors_loader</name>
+  <name>composable_simple_node</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="takayuki.akamine@tier4.jp">takamine</maintainer>
@@ -11,9 +11,10 @@
 
   <!-- ビルド時と実行時の依存関係 (CMakeLists.txtのfind_packageに対応) -->
   <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>std_msgs</depend>
   <depend>yaml-cpp</depend>
   <depend>simple_node</depend>
-  <depend>composable_simple_node</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

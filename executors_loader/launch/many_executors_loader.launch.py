@@ -3,10 +3,60 @@ from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch_ros.actions import Node, ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
-# OpaqueFunction内で実行される関数
-# contextオブジェクトを介してLaunchの引数にアクセスできます
+
+def get_component_container(executor_name, executor_property, config_file_path):
+  # executor_propertyからスレッド数と実行可能ファイルを取得
+  thread_num = 0
+  executable = 'component_container'
+  executor_type = executor_property.get('executor_type', 'single_threaded_executor')
+  if executor_type == 'single_threaded_executor':
+      thread_num = 1
+      executable = 'component_container'
+  else:
+      thread_num = 0
+      executable = 'component_container_mt'
+
+  node_list = []
+  for node in executor_property['nodes']:
+        node_name = node['node_name']
+        node_type = node['node_type']
+        intra_process = node.get('intra_process', False)
+
+        if node_type == 'simple_talker':
+            plugin_type = 'composable_simple_node::ComposableSimpleTalker'
+        elif node_type == 'simple_listener':
+            plugin_type = 'composable_simple_node::ComposableSimpleListener'
+        else:
+            raise ValueError(f"Unsupported node type: {node_type}")
+
+        # ここでコンポーザブルノードを定義
+        node_list.append(
+            ComposableNode (
+                package='composable_simple_node',
+                plugin=plugin_type,
+                name=node_name,
+                namespace=executor_name,
+                parameters=[{'node_config_file': config_file_path,
+                             'executor_name': executor_name},
+                             ],
+                extra_arguments=[{'use_intra_process_comms': intra_process}],
+            )
+        )
+
+  return ComposableNodeContainer(
+      name=executor_name + '_container',
+      namespace=executor_name,
+      executable=executable,
+      package='rclcpp_components',
+      arguments=['--executor-threads', str(thread_num)],
+      composable_node_descriptions=node_list,
+      output='screen',
+  )
+
+
 def launch_setup(context, *args, **kwargs):
     
     # 1. LaunchConfigurationからYAMLファイルのパスを取得
@@ -29,18 +79,25 @@ def launch_setup(context, *args, **kwargs):
     """
     # 3. 読み込んだ設定から Node オブジェクトのリストを生成
     executors_to_launch = []
-    for executor_name in config.keys():
+    component_container_to_launch = []
 
-        executors_to_launch.append(
-            Node(
-                package='executors_loader',
-                executable='executors_loader',
-                namespace=executor_name,
-                arguments=[executor_name, config_file_path],
-                output='screen',
-            )
-        )
+    for executor_name, executor_property in config.items():
+        use_composable_nodes = executor_property.get('use_composable_nodes', False)
+        
+        if not use_composable_nodes:
+          executors_to_launch.append(
+              Node(
+                  package='executors_loader',
+                  executable='executors_loader',
+                  namespace=executor_name,
+                  arguments=[executor_name, config_file_path],
+                  output='screen',
+              )
+          )
+        else:
+          component_container_to_launch.append(get_component_container(executor_name, executor_property, config_file_path))
 
+    executors_to_launch.extend(component_container_to_launch)
 
     # Nodeオブジェクトのリストを返す
     return executors_to_launch
