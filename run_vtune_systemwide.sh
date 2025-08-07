@@ -67,5 +67,5 @@ echo ">>> 完了: レポートは $RES_DIR/hotspots_report.csv に保存され�
 
 # 起動したROS2のプロセスを終了
 kill ${ROS2_PID}
-pkill -f ros2-many-callback-testing
+pkill -f ros2-many-callbacks-testing
 echo "ROS2のプロセスを終了しました。"
