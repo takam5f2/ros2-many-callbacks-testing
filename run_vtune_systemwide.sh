@@ -66,7 +66,23 @@ vtune -report hotspots \
 echo ">>> 完了: レポートは $RES_DIR/hotspots_report.csv に保存されました。"
 
 # 起動したROS2のプロセスを終了
-kill ${ROS2_PID}
-pkill -f simple_listener
-pkill -f simple_talker
+pkill -g ${ROS2_PID}
+
+# simple_listenerとsimple_talkerプロセスが完全に終了するまで待機
+echo "ROS2のプロセスを終了中..."
+pkill -f simple_node/lib/simple_node
+sleep 1
+while true; do
+    node_count=$(pgrep -f simple_node/lib/simple_node | wc -l)
+    
+    if [ $node_count -eq 0 ]; then
+        echo "全てのROS2プロセスが終了しました。"
+        break
+    fi
+    
+    echo "残りのプロセス: node_count=$node_count. 再度killします..."
+    pkill -f simple_node/lib/simple_node
+    sleep 10
+done
+
 echo "ROS2のプロセスを終了しました。"
