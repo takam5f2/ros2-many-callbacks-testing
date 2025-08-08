@@ -28,7 +28,7 @@ if [ -d "$RES_DIR" ]; then
 fi
 
 echo ">>> 設定を生成します (NODE_NUM: ${NODE_NUM})..."
-python3 config_generator/specfied_node_num.py $NODE_NUM
+python3 create_config_yaml_for_specified_node_num.py $NODE_NUM
 
 echo "ROS2 launchファイルを実行します..."
 # ROS2のlaunchファイルをバックグラウンドで実行
