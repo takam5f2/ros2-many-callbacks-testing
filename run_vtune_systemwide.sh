@@ -44,7 +44,7 @@ source /opt/intel/oneapi/setvars.sh
 vtune -collect hotspots \
       -finalization-mode=full \
       -knob sampling-mode=hw \
-      -knob enable-stack-collection=true \
+      -knob enable-stack-collection=false \
       -knob stack-size=4096 \
       -knob enable-characterization-insights=false \
       -data-limit 10000 \
@@ -67,5 +67,6 @@ echo ">>> 完了: レポートは $RES_DIR/hotspots_report.csv に保存され�
 
 # 起動したROS2のプロセスを終了
 kill ${ROS2_PID}
-pkill -f ros2-many-callbacks-testing
+pkill -f simple_listener
+pkill -f simple_talker
 echo "ROS2のプロセスを終了しました。"
