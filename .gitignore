@@ -16,3 +16,4 @@ log/
 *.pyc
 
 vtune*
+result

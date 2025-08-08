@@ -14,10 +14,12 @@ if [ $(cat /proc/sys/kernel/perf_event_paranoid) != -1 ] || [ $(cat /proc/sys/ke
 fi
 ulimit -n 65536
 
+mkdir -p result
+
 # --- 変数設定 ---
 # 第1引数をNODE_NUMとして使用する
 NODE_NUM="$1"
-RES_DIR="vtune_hs_system_wide_node_num_${NODE_NUM}"
+RES_DIR="result/vtune_hs_system_wide_node_num_${NODE_NUM}"
 
 # 既存のディレクトリがあれば削除するか、ユーザーに確認する（オプション）
 if [ -d "$RES_DIR" ]; then
@@ -37,7 +39,7 @@ ros2 launch simple_node simple_listener_talker_launch.py node_config_file:=confi
 ROS2_PID=$!
 
 # 起動が完了するまで待機しつつ、CPU使用率のログを取る
-python3 wait_until_cpu_usage_got_low.py > cpu_usage_log_node_num_${NODE_NUM}.csv
+python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}.csv
 
 echo ">>> VTuneによるプロファイリングを開始します (Duration: 10s)..."
 source /opt/intel/oneapi/setvars.sh
