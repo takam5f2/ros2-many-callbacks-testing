@@ -1,13 +1,25 @@
 #!/bin/bash
-set -x
+# set -x
 
 # --- 引数のチェック ---
-# スクリプトに引数が渡されていない場合は、使い方を表示して終了する
-if [ -z "$1" ]; then
-  echo "エラー: ノード数を引数として指定してください。"
-  echo "使用法: $0 <ノード数>"
-  exit 1
+# 引数として、ノード数、計測モードを↓のように指定する
+# $0 <ノード数> [pub_sub|pub_only|no_publisher]
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <node_num> [pub_sub|pub_only|no_publisher]"
+    exit 1
 fi
+# ノード数の引数をチェック
+if ! [[ $1 =~ ^[0-9]+$ ]]; then
+    echo "Error: ノード数は整数で指定してください。"
+    exit 1
+fi
+NODE_NUM="$1"
+# 計測モードの引数をチェック
+if [[ "$2" != "pub_sub" && "$2" != "pub_only" && "$2" != "no_publisher" ]]; then
+    echo "Error: 計測モードは 'pub_sub', 'pub_only', または 'no_publisher' のいずれかを指定してください。"
+    exit 1
+fi
+MEASUREMENT_MODE="$2"
 
 if [ $(cat /proc/sys/kernel/perf_event_paranoid) != -1 ] || [ $(cat /proc/sys/kernel/kptr_restrict) != 0 ] || [ $(cat /proc/sys/kernel/yama/ptrace_scope) != 0 ]; then
   sudo sh -c 'echo -1 > /proc/sys/kernel/perf_event_paranoid && echo 0 > /proc/sys/kernel/kptr_restrict && echo 0 > /proc/sys/kernel/yama/ptrace_scope'
@@ -18,8 +30,7 @@ mkdir -p result
 
 # --- 変数設定 ---
 # 第1引数をNODE_NUMとして使用する
-NODE_NUM="$1"
-RES_DIR="result/vtune_hs_system_wide_node_num_${NODE_NUM}"
+RES_DIR="result/vtune_hs_system_wide_node_num_${NODE_NUM}_${MEASUREMENT_MODE}"
 
 # 既存のディレクトリがあれば削除するか、ユーザーに確認する（オプション）
 if [ -d "$RES_DIR" ]; then
@@ -28,18 +39,18 @@ if [ -d "$RES_DIR" ]; then
 fi
 
 echo ">>> 設定を生成します (NODE_NUM: ${NODE_NUM})..."
-python3 create_config_yaml_for_specified_node_num.py $NODE_NUM
+python3 create_config_yaml_for_specified_node_num.py $NODE_NUM $MEASUREMENT_MODE
 
 echo "ROS2 launchファイルを実行します..."
 # ROS2のlaunchファイルをバックグラウンドで実行
-source install/setup.bash
+source ../install/setup.bash
 ros2 launch simple_node simple_listener_talker_launch.py node_config_file:=config.yaml &
 
 # launchファイルのプロセスIDを取得
 ROS2_PID=$!
 
 # 起動が完了するまで待機しつつ、CPU使用率のログを取る
-python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}.csv
+python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}_${MEASUREMENT_MODE}.csv
 
 echo ">>> VTuneによるプロファイリングを開始します (Duration: 10s)..."
 source /opt/intel/oneapi/setvars.sh
