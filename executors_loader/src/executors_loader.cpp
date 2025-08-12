@@ -21,12 +21,18 @@ rclcpp::Executor::SharedPtr create_executor(const YAML::Node & config)
 
 rclcpp::Node::SharedPtr create_simple_node(const YAML::Node & node_config)
 {
-  std::string node_name = node_config["node_name"].as<std::string>();
-  std::string node_type = node_config["node_type"].as<std::string>();
-  bool intra_process = node_config["intra_process"].as<bool>();
+  std::string node_name = node_config["node_name"].as<std::string>("default_simple_talker");
+  std::string node_type = node_config["node_type"].as<std::string>("simple_talker");
+  bool intra_process = node_config["intra_process"].as<bool>(false);
+  bool enable_rosout = node_config["enable_rosout"].as<bool>(true);
+  bool start_parameter_services = node_config["start_parameter_services"].as<bool>(true);
+  bool start_parameter_event_publisher = node_config["start_parameter_event_publisher"].as<bool>(true);
 
   rclcpp::NodeOptions options;
   options.use_intra_process_comms(intra_process);
+  options.enable_rosout(enable_rosout);
+  options.start_parameter_services(start_parameter_services);
+  options.start_parameter_event_publisher(start_parameter_event_publisher);
 
   if (node_type == "simple_talker") {
     return std::make_shared<simple_node::SimpleTalker>(node_name, node_config, options);

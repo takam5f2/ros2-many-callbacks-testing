@@ -45,6 +45,9 @@ executor_02:
   - node_name: "simple_talker"
     node_type: simple_talker
     intra_process: false
+    enable_rosout: false
+    start_parameter_services: false
+    start_parameter_event_publisher: false
     callbacks:
       - topic: /topic/intra_process/message/name2
         frequency: 10
@@ -61,6 +64,9 @@ executor_02:
   - node_name: "simple_listener"
     node_type: simple_listener
     intra_process: false
+    enable_rosout: false
+    start_parameter_services: false
+    start_parameter_event_publisher: false
     silent: true
     callbacks:
       - topic: /topic/intra_process/message/name2
