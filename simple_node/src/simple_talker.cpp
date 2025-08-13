@@ -79,7 +79,6 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
         auto & message = messages_[callback_idx];
 
         if (show_count) {
-          message.data.replace(message.data.size() - 8, 8, std::to_string(publishing_counters_[callback_idx]));
         }
 
         publishing_counters_[callback_idx]++;
