@@ -12,6 +12,17 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
+# MessageGenerator 
+add_library(message_generator_lib SHARED src/message_generator.cpp)
+ament_target_dependencies(message_generator_lib
+  std_msgs
+  yaml-cpp
+)
+target_include_directories(message_generator_lib PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
 
 #
 # Talkerライブラリの定義
@@ -24,6 +35,10 @@ ament_target_dependencies(simple_talker_lib
   std_msgs
   yaml-cpp
 )
+
+target_link_libraries(simple_talker_lib
+  message_generator_lib
+  yaml-cpp)
 
 
 # インクルードディレクトリを指定
@@ -76,6 +91,26 @@ target_link_libraries(simple_listener
   simple_listener_lib
   yaml-cpp
 )
+
+# Test Configuration
+if(BUILD_TESTING)
+  # find_package(ament_lint_auto REQUIRED)
+  # ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_message_generator
+    test/test_message_generator.cpp
+  )
+  target_link_libraries(test_message_generator
+    message_generator_lib
+    yaml-cpp
+  )  
+
+  ament_target_dependencies(test_message_generator
+    rclcpp
+    std_msgs
+    yaml-cpp
+  )
+endif()
 
 #
 # インストール設定

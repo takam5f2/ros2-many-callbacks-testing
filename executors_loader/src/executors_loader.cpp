@@ -19,7 +19,7 @@ rclcpp::Executor::SharedPtr create_executor(const YAML::Node & config)
 }
 
 
-rclcpp::Node::SharedPtr create_simple_node(const YAML::Node & node_config)
+rclcpp::Node::SharedPtr create_simple_node(const YAML::Node & node_config, unsigned int random_seed)
 {
   std::string node_name = node_config["node_name"].as<std::string>();
   std::string node_type = node_config["node_type"].as<std::string>();
@@ -29,7 +29,7 @@ rclcpp::Node::SharedPtr create_simple_node(const YAML::Node & node_config)
   options.use_intra_process_comms(intra_process);
 
   if (node_type == "simple_talker") {
-    return std::make_shared<simple_node::SimpleTalker>(node_name, node_config, options);
+    return std::make_shared<simple_node::SimpleTalker>(node_name, node_config, random_seed, options);
   } else if (node_type == "simple_listener") {
     return std::make_shared<simple_node::SimpleListener>(node_name, node_config, options);
   } else {
@@ -93,6 +93,15 @@ int main (int argc, char ** argv)
   std::string executor_name = argv[1];
   std::string  config_file = argv[2];
 
+  unsigned int random_seed = 0u;
+  if (argc > 3) {
+    try {
+      random_seed = std::stoul(argv[3]);
+    } catch (const std::invalid_argument & e) {
+      random_seed = 0u; // Default seed if conversion fails
+    }
+  }
+
   YAML::Node config;
   try {
     config = YAML::LoadFile(config_file);
@@ -118,7 +127,7 @@ int main (int argc, char ** argv)
   std::vector<rclcpp::Node::SharedPtr> nodes;
   for (const auto & node_config : config[executor_name]["nodes"]) {
 
-    rclcpp::Node::SharedPtr node = create_simple_node(node_config);
+    rclcpp::Node::SharedPtr node = create_simple_node(node_config, random_seed);
     if (!node) {
       RCLCPP_ERROR(rclcpp::get_logger("executors_loader"), "Failed to create node: %s", node_config["node_name"].as<std::string>().c_str());
       return 1;

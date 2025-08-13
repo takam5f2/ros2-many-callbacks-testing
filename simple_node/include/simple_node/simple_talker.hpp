@@ -5,29 +5,20 @@
 #include <vector>
 #include <string>
 #include "yaml-cpp/yaml.h"
-
+#include "simple_node/message_generator.hpp"
 
 namespace simple_node
 {
-  enum MessagePattern : unsigned int
-  {
-    GIVEN_MESSAGE = 0,
-    REPEAT = 1,
-    RANDOM = 2,
-  };
 
   class SimpleTalker : public rclcpp::Node
   {
   public:
-    SimpleTalker(const std::string &default_node_name, const YAML::Node &config = YAML::Node(),
+    SimpleTalker(const std::string &default_node_name, const YAML::Node &config = YAML::Node(), unsigned int random_seed = 0,
                  const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
     virtual ~SimpleTalker() override;
-
+    int init(const YAML::Node &config, const unsigned int &random_seed = 0);
+    
   private:
-    int init(const YAML::Node &config);
-    void reserve_message(const YAML::Node &config);
-    void repeat_message(const std::string &given_message, const size_t &message_byte_size, std::string &message_text);
-    void random_message(const std::string &given_message, const size_t &message_byte_size, std::string &message_text);
 
     // Multiple publishers for different IDs by std::vector
     std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_{};
