@@ -24,6 +24,32 @@ import sys
 import yaml
 
 
+def get_simple_talker_config(node_index):
+    return {
+        "node_name": f"composable_simple_talker_{node_index}",
+        "node_type": "simple_talker",
+        "intra_process": False,
+        "callbacks": [{
+            "topic": f"/topic/message/composable_name{node_index}",
+            "frequency": 10,
+            "message": f"Hello from composable_name{node_index}",
+            "launch": True
+        }]
+    }
+
+
+def get_simple_listener_config(node_index):
+    return {
+        "node_name": f"composable_simple_listener_{node_index}",
+        "node_type": "simple_listener",
+        "intra_process": False,
+        "silent": True,
+        "callbacks": [{
+            "topic": f"/topic/message/composable_name{node_index}"
+        }]
+    }
+
+
 def generate_config_for_component_container(total_node_num: int, node_num_per_component) -> dict:
     config = {}
     component_num = total_node_num // node_num_per_component
@@ -36,18 +62,13 @@ def generate_config_for_component_container(total_node_num: int, node_num_per_co
         }
         for j in range(node_num_per_component):
             node_index = i * node_num_per_component + j
-            node_name = f"composable_simple_talker_{node_index}"
-            config[component_name]["nodes"].append({
-                "node_name": node_name,
-                "node_type": "simple_talker",
-                "intra_process": False,
-                "callbacks": [{
-                    "topic": f"/topic/message/composable_name{node_index}",
-                    "frequency": 10,
-                    "message": f"Hello from composable_name{node_index}",
-                    "launch": True
-                }]
-            })
+            node_type = "simple_talker" if node_index % 2 == 0 else "simple_listener"
+            node_topic_index = node_index//2
+            if node_type == "simple_talker":
+                node_config = get_simple_talker_config(node_topic_index)
+            else:
+                node_config = get_simple_listener_config(node_topic_index)
+            config[component_name]["nodes"].append(node_config)
     left_nodes = total_node_num % node_num_per_component
     if left_nodes > 0:
         component_name = f"composable_executor_{component_num:02d}"
@@ -58,18 +79,13 @@ def generate_config_for_component_container(total_node_num: int, node_num_per_co
         }
         for j in range(left_nodes):
             node_index = component_num * node_num_per_component + j
-            node_name = f"composable_simple_talker_{node_index}"
-            config[component_name]["nodes"].append({
-                "node_name": node_name,
-                "node_type": "simple_talker",
-                "intra_process": False,
-                "callbacks": [{
-                    "topic": f"/topic/message/composable_name{node_index}",
-                    "frequency": 10,
-                    "message": f"Hello from composable_name{node_index}",
-                    "launch": True
-                }]
-            })
+            node_type = "simple_talker" if node_index % 2 == 0 else "simple_listener"
+            node_topic_index = node_index//2
+            if node_type == "simple_talker":
+                node_config = get_simple_talker_config(node_topic_index)
+            else:
+                node_config = get_simple_listener_config(node_topic_index)
+            config[component_name]["nodes"].append(node_config)
     return config
 
 
