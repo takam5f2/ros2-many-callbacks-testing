@@ -58,12 +58,15 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
     if (cb_config["launch"] && cb_config["launch"].IsScalar()) {
       launch = cb_config["launch"].as<bool>();
     }
-    bool append_count = cb_config["show_counter"].as<bool>(true);
-
     // message will be reserved even if launch is false because the implementation is easier.
     std_msgs::msg::String message_text;
     message_generator.generate_message(cb_config, message_text);
     messages_.emplace_back(message_text);
+
+    bool show_count = cb_config["show_counter"].as<bool>(true);
+    if (show_count) {
+      messages_.back().data.append("pubs: 00000000");
+    }
 
     if (launch) {
       // in this case, this talker will publish messages with the given  topic.
@@ -72,8 +75,13 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
       publishing_counters_.push_back(static_cast<unsigned int>(0));
     
       // defining the timer callback.
-      auto timer_callback = [this, publisher,  callback_idx]() -> void {
+      auto timer_callback = [this, publisher,  callback_idx, show_count]() -> void {
         auto & message = messages_[callback_idx];
+
+        if (show_count) {
+          message.data.replace(message.data.size() - 8, 8, std::to_string(publishing_counters_[callback_idx]));
+        }
+
         publishing_counters_[callback_idx]++;
         publisher->publish(message);
       };
