@@ -51,9 +51,10 @@ int SimpleListener::init(const YAML::Node &config)
     }
 
     receiving_counters_.push_back(static_cast<unsigned int>(0));
-    auto subscriber = this->create_subscription<std_msgs::msg::String>(
+    auto subscriber = agnocast::create_subscription<std_msgs::msg::String>(
+      this,
       topic, 10,
-      [this, topic, callback_idx, silent](const std_msgs::msg::String::SharedPtr msg) {
+      [this, topic, callback_idx, silent](const agnocast::ipc_shared_ptr<std_msgs::msg::String> msg) {
       if (!silent) {
         RCLCPP_INFO(this->get_logger(), "%d Received message on '%s': %s", receiving_counters_[callback_idx], topic.c_str(), msg->data.c_str());
       }

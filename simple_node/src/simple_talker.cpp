@@ -54,14 +54,14 @@ int SimpleTalker::init(const YAML::Node &config)
     }    
 
     if (launch) {
-      auto publisher = this->create_publisher<std_msgs::msg::String>(topic, 10);
+      auto publisher = agnocast::create_publisher<std_msgs::msg::String>(this, topic, 10);
       publishers_.push_back(publisher);
       publishing_counters_.push_back(static_cast<unsigned int>(0));
     
       auto timer_callback = [this, publisher, message_text, callback_idx]() -> void {
-        auto message = std_msgs::msg::String();
-        message.data = message_text + " " + std::to_string(publishing_counters_[callback_idx]++);
-        publisher->publish(message);
+        agnocast::ipc_shared_ptr<std_msgs::msg::String> message = publisher->borrow_loaned_message();
+        message->data = message_text + " " + std::to_string(publishing_counters_[callback_idx]++);
+        publisher->publish(std::move(message));
       };
 
       auto timer = this->create_wall_timer(

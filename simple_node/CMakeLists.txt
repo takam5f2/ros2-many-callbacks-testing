@@ -11,7 +11,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
-
+find_package(agnocastlib)
 
 #
 # Talkerライブラリの定義
@@ -30,8 +30,10 @@ ament_target_dependencies(simple_talker_lib
 target_include_directories(simple_talker_lib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
+  ${agnocastlib_INCLUDE_DIRS}
 )
 
+ament_target_dependencies(simple_talker_lib agnocastlib)
 
 #
 # Talker実行可能ファイルの定義
@@ -63,7 +65,11 @@ ament_target_dependencies(simple_listener_lib
 target_include_directories(simple_listener_lib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
+  ${agnocastlib_INCLUDE_DIRS}
 )
+
+ament_target_dependencies(simple_listener_lib agnocastlib)
+
 
 add_executable(simple_listener src/simple_listener_main.cpp)
 # amentパッケージへの依存関係を指定
@@ -109,7 +115,7 @@ install(DIRECTORY launch/
 
 ament_export_include_directories(include)
 ament_export_libraries(simple_talker_lib simple_listener_lib)
-ament_export_dependencies(rclcpp std_msgs yaml-cpp)
+ament_export_dependencies(rclcpp std_msgs yaml-cpp agnocastlib)
 
 # amentパッケージとして登録
 ament_package()

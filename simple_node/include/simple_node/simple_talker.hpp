@@ -6,6 +6,7 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 
+#include <agnocast/agnocast.hpp>
 
 namespace simple_node
 {
@@ -18,7 +19,7 @@ public:
   int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
-  std::vector<rclcpp::Publisher<std_msgs::msg::String>::SharedPtr> publishers_{};
+  std::vector<std::shared_ptr<agnocast::Publisher<std_msgs::msg::String>>> publishers_{};
   // Multiple timers for different IDs by std::vector
   std::vector<rclcpp::TimerBase::SharedPtr> timers_{};
   std::vector<unsigned int> publishing_counters_{}; // Store frequencies for each timer

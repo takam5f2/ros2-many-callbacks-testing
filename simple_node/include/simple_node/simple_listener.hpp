@@ -6,6 +6,8 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 
+#include <agnocast/agnocast.hpp>
+
 
 namespace simple_node
 {
@@ -18,7 +20,7 @@ public:
   int init(const YAML::Node &config);
 private:
   // Multiple publishers for different IDs by std::vector
-  std::vector<rclcpp::Subscription<std_msgs::msg::String>::SharedPtr> subscribers_{};
+  std::vector<std::shared_ptr<agnocast::Subscription<std_msgs::msg::String>>> subscribers_{};
   std::vector<unsigned int> receiving_counters_{};
 };
 }

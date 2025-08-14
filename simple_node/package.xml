@@ -10,6 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <!-- ビルド時と実行時の依存関係 (CMakeLists.txtのfind_packageに対応) -->
+  <depend>agnocastlib</depend>
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>yaml-cpp</depend>
