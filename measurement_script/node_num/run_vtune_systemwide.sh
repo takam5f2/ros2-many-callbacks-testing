@@ -43,7 +43,7 @@ python3 create_config_yaml_for_specified_node_num.py $NODE_NUM $MEASUREMENT_MODE
 
 echo "ROS2 launchファイルを実行します..."
 # ROS2のlaunchファイルをバックグラウンドで実行
-source ../install/setup.bash
+source ../../install/setup.bash
 ros2 launch simple_node simple_listener_talker_launch.py node_config_file:=config.yaml &
 
 # launchファイルのプロセスIDを取得
