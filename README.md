@@ -10,8 +10,20 @@ However, it is difficult to estimate the resources consumed by the ROS 2 runtime
 ```
 git clone git@github.com:takam5f2/ros2-many-callbacks-testing.git
 cd ros2-many-callbacks-testing
+
+# Install Dependency
+vcs import < build_depends.repos
+rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro $ROS_DISTRO
+sudo apt install agnocast-heaphook-v2.1.1
+
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --packages-up-to executors_loader
 source install/setup.bash
+
+# To Enable Agnocast
+export LD_PRELOAD=/opt/ros/humble/lib/libagnocast_heaphook.so
+export AGNOCAST_MEMPOOL_SIZE=134217728 # 128MB
+sudo modprobe agnocast
+
 ros2 launch executors_loader many_executors_loader.launch.py
 # ros2 launch executors_loader many_executors_loader.launch.py executor_config_file:=./executors_loader/config/large_executor_config.yaml 
 ```
