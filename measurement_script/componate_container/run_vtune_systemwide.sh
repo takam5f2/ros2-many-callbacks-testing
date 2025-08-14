@@ -3,9 +3,9 @@
 
 # --- 引数のチェック ---
 # 引数として、ノード数、1component containerあたりのノード数を↓のように指定する
-# $0 <ノード数> <ノード数/コンポーネント>
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 <total_node_num> <node_num_per_component>"
+# $0 <ノード数> <ノード数/コンポーネント> <single_threaded|multi_threaded>
+if [ $# -lt 3 ]; then
+    echo "Usage: $0 <total_node_num> <node_num_per_component> <single_threaded|multi_threaded>"
     exit 1
 fi
 # ノード数の引数をチェック
@@ -20,6 +20,12 @@ if ! [[ $2 =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 NODE_NUM_PER_COMPONENT="$2"
+# スレッドモデルの引数をチェック
+if [ "$3" != "single_threaded" ] && [ "$3" != "multi_threaded" ]; then
+    echo "Error: スレッドモデルは 'single_threaded' または 'multi_threaded' で指定してください。"
+    exit 1
+fi
+THREAD_MODEL="$3"
 
 if [ $(cat /proc/sys/kernel/perf_event_paranoid) != -1 ] || [ $(cat /proc/sys/kernel/kptr_restrict) != 0 ] || [ $(cat /proc/sys/kernel/yama/ptrace_scope) != 0 ]; then
   sudo sh -c 'echo -1 > /proc/sys/kernel/perf_event_paranoid && echo 0 > /proc/sys/kernel/kptr_restrict && echo 0 > /proc/sys/kernel/yama/ptrace_scope'
@@ -40,6 +46,12 @@ fi
 
 echo ">>> 設定を生成します (NODE_NUM: ${NODE_NUM})..."
 python3 create_config_yaml_for_specified_node_num_per_container.py $NODE_NUM $NODE_NUM_PER_COMPONENT
+
+# THREAD_MODELがmulti_threadedの場合、config.yamlの文字列を下記の通り置換する
+# "executor_type: single_threaded_executor" → "executor_type: multi_threaded_executor"
+if [ "$THREAD_MODEL" == "multi_threaded" ]; then
+    sed -i 's/executor_type: single_threaded_executor/executor_type: multi_threaded_executor/' config.yaml
+fi
 
 echo "ROS2 launchファイルを実行します..."
 # ROS2のlaunchファイルをバックグラウンドで実行
