@@ -3,9 +3,9 @@
 
 # --- 引数のチェック ---
 # 引数として、ノード数、計測モードを↓のように指定する
-# $0 <ノード数> <topic周波数>
+# $0 <ノード数> <topic周波数> <single_threaded|multi_threaded>
 if [ $# -lt 2 ]; then
-    echo "Usage: $0 <node_num> <topic_frequency>"
+    echo "Usage: $0 <node_num> <topic_frequency> <single_threaded|multi_threaded>"
     exit 1
 fi
 # ノード数の引数をチェック
@@ -20,6 +20,12 @@ if ! [[ $2 =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 TOPIC_FREQUENCY="$2"
+# スレッドモデルの引数をチェック
+if [ "$3" != "single_threaded" ] && [ "$3" != "multi_threaded" ]; then
+    echo "Error: スレッドモデルは 'single_threaded' または 'multi_threaded' で指定してください。"
+    exit 1
+fi
+THREAD_MODEL="$3"
 
 if [ $(cat /proc/sys/kernel/perf_event_paranoid) != -1 ] || [ $(cat /proc/sys/kernel/kptr_restrict) != 0 ] || [ $(cat /proc/sys/kernel/yama/ptrace_scope) != 0 ]; then
   sudo sh -c 'echo -1 > /proc/sys/kernel/perf_event_paranoid && echo 0 > /proc/sys/kernel/kptr_restrict && echo 0 > /proc/sys/kernel/yama/ptrace_scope'
@@ -40,6 +46,13 @@ fi
 
 echo ">>> 設定を生成します (NODE_NUM: ${NODE_NUM})..."
 python3 create_config_yaml_for_specified_node_num_and_topic_hz.py $NODE_NUM $TOPIC_FREQUENCY
+
+# THREAD_MODELがmulti_threadedの場合、config.yamlの文字列を下記の通り置換する
+# "executor_type: single_threaded" → "executor_type: multi_threaded"
+if [ "$THREAD_MODEL" == "multi_threaded" ]; then
+    echo ">>> スレッドモデルをmulti_threadedに設定します..."
+    sed -i 's/executor_type: single_threaded/executor_type: multi_threaded/' config.yaml
+fi
 
 echo "ROS2 launchファイルを実行します..."
 # ROS2のlaunchファイルをバックグラウンドで実行
