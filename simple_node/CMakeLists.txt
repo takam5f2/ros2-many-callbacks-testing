@@ -12,22 +12,26 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
+
+# 共通のインクルードディレクトリ設定
+set(PUBLIC_INCLUDE_DIRS
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
 # MessageGenerator 
 add_library(message_generator_lib SHARED src/message_generator.cpp)
 ament_target_dependencies(message_generator_lib
   std_msgs
   yaml-cpp
 )
-target_include_directories(message_generator_lib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
+target_include_directories(message_generator_lib PUBLIC ${PUBLIC_INCLUDE_DIRS})
 
 
 #
 # Talkerライブラリの定義
 #
-add_library(simple_talker_lib SHARED src/simple_talker.cpp)
+add_library(simple_talker_lib SHARED src/simple_talker.cpp src/talker_topic_manager.cpp)
 
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_talker_lib
@@ -37,21 +41,18 @@ ament_target_dependencies(simple_talker_lib
 )
 
 target_link_libraries(simple_talker_lib
-  message_generator_lib
-  yaml-cpp)
+  message_generator_lib)
 
 
 # インクルードディレクトリを指定
-target_include_directories(simple_talker_lib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
+target_include_directories(simple_talker_lib PUBLIC  ${PUBLIC_INCLUDE_DIRS})
 
 
 #
 # Talker実行可能ファイルの定義
 #
 add_executable(simple_talker src/simple_talker_main.cpp)
+target_compile_options(simple_talker PRIVATE -g)
 
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_talker
@@ -75,10 +76,7 @@ ament_target_dependencies(simple_listener_lib
   yaml-cpp
 )
 # インクルードディレクトリを指定
-target_include_directories(simple_listener_lib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
+target_include_directories(simple_listener_lib PUBLIC  ${PUBLIC_INCLUDE_DIRS})
 
 add_executable(simple_listener src/simple_listener_main.cpp)
 # amentパッケージへの依存関係を指定

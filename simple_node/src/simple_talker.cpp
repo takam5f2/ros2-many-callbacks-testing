@@ -12,7 +12,7 @@
 namespace simple_node
 {
 
-SimpleTalker::SimpleTalker(const std::string &default_node_name, const YAML::Node &config, unsigned int random_seed,
+SimpleTalker::SimpleTalker(const std::string &default_node_name,
                            const rclcpp::NodeOptions &options)
   : Node(default_node_name, options)
 {
@@ -23,10 +23,6 @@ SimpleTalker::SimpleTalker(const std::string &default_node_name, const YAML::Nod
   if (options.use_intra_process_comms()) {
     RCLCPP_INFO(this->get_logger(), "Intra-process communication is enabled for node '%s'.", node_name.c_str());
   }
-
-  if (config["callbacks"] && config["callbacks"].IsSequence()) {
-    init(config, random_seed);
-  }
 }
 
 SimpleTalker::~SimpleTalker()
@@ -36,55 +32,42 @@ SimpleTalker::~SimpleTalker()
 
 int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed)
 {
-  if (publishers_.size() > 0 || timers_.size() > 0) {
+  if (ptr_talker_topic_manager != nullptr) {
     return -1; // Already initialized
   }
 
   std::string node_name = this->get_name();
-  MessageGenerator message_generator{random_seed};
 
+  std::shared_ptr<MessageGenerator> ptr_message_generator = std::make_shared<MessageGenerator>(random_seed);
 
   if (!config["callbacks"] || !config["callbacks"].IsSequence()) {
     RCLCPP_ERROR(this->get_logger(), "No 'callbacks' sequence found for node '%s'", node_name.c_str());
     return -1;
   }
 
+  ptr_talker_topic_manager = std::make_shared<TalkerTopicManager>(ptr_message_generator, config["callbacks"].size());
+
+
   unsigned int callback_idx = 0;
   for (const auto &cb_config : config["callbacks"])
   {
-    auto topic = cb_config["topic"].as<std::string>();
-    auto frequency = cb_config["frequency"].as<double>();
-    auto launch = true; // Default to not silent
-    if (cb_config["launch"] && cb_config["launch"].IsScalar()) {
-      launch = cb_config["launch"].as<bool>();
-    }
-    // message will be reserved even if launch is false because the implementation is easier.
-    std_msgs::msg::String message_text;
-    message_generator.generate_message(cb_config, message_text);
-    messages_.emplace_back(message_text);
+    auto frequency = cb_config["frequency"].as<double>(1.0);
+    auto launch = cb_config["launch"].as<bool>(true);
 
-    bool show_count = cb_config["show_counter"].as<bool>(true);
-    if (show_count) {
-      messages_.back().data.append("pubs: 00000000");
-    }
+    // message will be reserved even if launch is false because the implementation is easier.
+    ptr_talker_topic_manager->generate_message(callback_idx, cb_config);
 
     if (launch) {
-      // in this case, this talker will publish messages with the given  topic.
-      auto publisher = this->create_publisher<std_msgs::msg::String>(topic, 10);
-      publishers_.push_back(publisher);
-      publishing_counters_.push_back(static_cast<unsigned int>(0));
-    
+      auto topic = cb_config["topic"].as<std::string>("/unnamed/message");
+      bool show_count = cb_config["show_counter"].as<bool>(true);
+
+      ptr_talker_topic_manager->create_publisher(callback_idx, this, topic);
+
       // defining the timer callback.
-      auto timer_callback = [this, publisher,  callback_idx, show_count]() -> void {
-        auto & message = messages_[callback_idx];
-
-        if (show_count) {
-        }
-
-        publishing_counters_[callback_idx]++;
-        publisher->publish(message);
+      auto timer_callback = [this, callback_idx, show_count]() -> void
+      {
+        ptr_talker_topic_manager->publish_buffered_message(callback_idx, show_count);
       };
-
 
       auto timer = this->create_wall_timer(
         std::chrono::duration<double>(1.0 / frequency),
@@ -97,11 +80,10 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
     } else {
       // in this case, this talker will not publish messages with the given topic.
       // only timer and counter will run.
-      publishing_counters_.push_back(static_cast<unsigned int>(0));
 
       auto timer_callback = [this, callback_idx]() -> void
       {
-        publishing_counters_[callback_idx]++;
+        ptr_talker_topic_manager->increment_publishing_count(callback_idx);
       };
 
       auto timer = this->create_wall_timer(
@@ -109,8 +91,7 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
         timer_callback
       );
       timers_.push_back(timer);
-
-      RCLCPP_INFO(this->get_logger(), "Timer for '%s' set at %f Hz but not publishing messages", topic.c_str(), frequency);
+      RCLCPP_INFO(this->get_logger(), "Timer set at %f Hz but not publishing messages", frequency);
     }
 
     callback_idx++;
@@ -118,4 +99,5 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
 
   return 0;
 }
+
 }

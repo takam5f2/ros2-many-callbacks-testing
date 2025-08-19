@@ -36,10 +36,11 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  auto node = std::make_shared<simple_node::SimpleTalker>(node_name, node_config, random_seed);
+  auto node = std::make_shared<simple_node::SimpleTalker>(node_name);
+  node->init(node_config, random_seed);
 
-  
-  if (node_config["executor_type"] && node_config["executor_type"].as<std::string>() == "multi_threaded") {
+  if (node_config["executor_type"] && node_config["executor_type"].as<std::string>() == "multi_threaded")
+  {
     auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
     executor->add_node(node);
     executor->spin();
