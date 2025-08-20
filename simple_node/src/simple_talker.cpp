@@ -57,22 +57,23 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
 
   // talker_topic_manager gets config files and generate topic message automatically.
   ptr_talker_topic_manager_ = std::make_shared<TalkerTopicManager>();
-  ptr_talker_topic_manager(node, config, random_seed);
+  ptr_talker_topic_manager_->init_by_config(this, config, random_seed);
 
   // set timer callback
   unsigned int callback_idx = 0;
   for (const auto &cb_config : config["callbacks"])
   {
     auto frequency = cb_config["frequency"].as<double>(1.0);
-    std::function<void(unsigned int)> timer_callback;
+    std::function<void()> timer_callback;
 
-    if (ptr_talker_topic_manager->check_launch(callback_idx))
+    if (ptr_talker_topic_manager_->check_launch(callback_idx))
     {
       timer_callback = [this, callback_idx]() -> void
       {
         ptr_talker_topic_manager_->publish_buffered_message(callback_idx);
       };
-      RCLCPP_INFO(this->get_logger(), "Publishing to '%s' at %f Hz", topic.c_str(), frequency);
+      RCLCPP_INFO(this->get_logger(), "Publishing to '%s' at %f Hz",
+      ptr_talker_topic_manager_->get_topic_name(callback_idx), frequency);
     }
     else
     {

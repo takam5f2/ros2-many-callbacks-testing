@@ -50,7 +50,7 @@ namespace simple_node
         publisher_->publish(message_);
         increment_count();
         if (show_count_) {
-          dalete_suffix_from_message();
+          delete_suffix_from_message();
         }
       }
 
@@ -63,7 +63,7 @@ namespace simple_node
         launch_ = launch;
       }
 
-      void check_launch() {
+      bool check_launch() {
         return launch_;
       }
 
@@ -71,8 +71,11 @@ namespace simple_node
         show_count_ = show_count;
       }
 
+      const char* get_topic_name() {
+        return publisher_->get_topic_name();
+      }
+
     private:
-      rclcpp::Node *ptr_node_;
       rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_{nullptr};
       std_msgs::msg::String message_{};
       bool launch_{false};
@@ -90,12 +93,14 @@ namespace simple_node
 
       bool init_by_config(rclcpp::Node *node, const YAML::Node config, unsigned int random_seed);
 
-      const unsigned int TalkerTopicManager::get_topic_num();
-      const bool TalkerTopicManager::check_launch(const unsigned int id);
+      unsigned int get_topic_num();
+      bool check_launch(const unsigned int id);
 
-      bool publish_buffered_message(const unsigned int id, const bool  show_count);
+      bool publish_buffered_message(const unsigned int id);
 
       void increment_publishing_count(const unsigned int id);
+
+      const char *get_topic_name(const unsigned int id);
 
     private:
       std::vector<struct TalkerTopic> talker_topic_list_{};
