@@ -44,8 +44,14 @@ namespace simple_node
       }
 
       void publish() {
+        if (show_count_) {
+          add_publish_count_to_message();
+        }
         publisher_->publish(message_);
         increment_count();
+        if (show_count_) {
+          dalete_suffix_from_message();
+        }
       }
 
       inline void increment_count() {
@@ -53,10 +59,24 @@ namespace simple_node
         publishing_count_ = publishing_count_ & MASK_TO_DIGITS;
       }
 
+      void set_launch(const bool launch) {
+        launch_ = launch;
+      }
+
+      void check_launch() {
+        return launch_;
+      }
+
+      void set_show_count(const bool show_count) {
+        show_count_ = show_count;
+      }
+
     private:
       rclcpp::Node *ptr_node_;
       rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_{nullptr};
       std_msgs::msg::String message_{};
+      bool launch_{false};
+      bool show_count_{false};
       unsigned int publishing_count_{0};
       static constexpr unsigned int MASK_TO_DIGITS = 0xffffffff ^ (0xffffffff << 26); // this bit mask set limits of counters for 8 digits.
       static constexpr unsigned int SUFFIX_LENGTH = 11u;
@@ -65,27 +85,20 @@ namespace simple_node
   class TalkerTopicManager
   {
     public:
-  TalkerTopicManager(
-      const std::shared_ptr<MessageGenerator> ptr_message_generator, const unsigned int message_num);
+      TalkerTopicManager() = default;
       virtual ~TalkerTopicManager() = default;
 
-      void register_message_generator(const std::shared_ptr<MessageGenerator>  message_generator);
+      bool init_by_config(rclcpp::Node *node, const YAML::Node config, unsigned int random_seed);
 
-      bool create_publisher(const unsigned int id, rclcpp::Node *node, const std::string & topic_name);
-
-      bool generate_message(const unsigned int id, const YAML::Node & config);
+      const unsigned int TalkerTopicManager::get_topic_num();
+      const bool TalkerTopicManager::check_launch(const unsigned int id);
 
       bool publish_buffered_message(const unsigned int id, const bool  show_count);
 
       void increment_publishing_count(const unsigned int id);
 
     private:
-      bool add_publish_count_to_message(const unsigned int id);
-      bool delete_publish_count_from_message(const unsigned int id);
-
-
-      std::vector<struct TalkerTopic> talker_topic_list_;
-      std::shared_ptr<MessageGenerator> message_generator_;
+      std::vector<struct TalkerTopic> talker_topic_list_{};
   };
 }
 
