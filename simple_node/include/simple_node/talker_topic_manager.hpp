@@ -7,7 +7,6 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <iostream>
 
 namespace simple_node
 {
