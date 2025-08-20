@@ -13,6 +13,7 @@ namespace simple_node
 {
 
 SimpleTalker::SimpleTalker(const std::string &default_node_name,
+                           const YAML::Node &config, unsigned int random_seed,
                            const rclcpp::NodeOptions &options)
   : Node(default_node_name, options)
 {
@@ -23,6 +24,11 @@ SimpleTalker::SimpleTalker(const std::string &default_node_name,
   if (options.use_intra_process_comms()) {
     RCLCPP_INFO(this->get_logger(), "Intra-process communication is enabled for node '%s'.", node_name.c_str());
   }
+
+  if (config["callbacks"] && config["callbacks"].IsSequence()) {
+    init(config, random_seed);
+  }
+
 }
 
 SimpleTalker::~SimpleTalker()

@@ -16,6 +16,7 @@ namespace simple_node
   {
   public:
     SimpleTalker(const std::string &default_node_name,
+                 const YAML::Node &config, unsigned int random_seed,
                  const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
     virtual ~SimpleTalker() override;
     int init(const YAML::Node &config, const unsigned int &random_seed = 0);

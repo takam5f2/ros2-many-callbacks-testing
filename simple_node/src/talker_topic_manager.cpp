@@ -7,7 +7,9 @@ namespace simple_node
   TalkerTopicManager::TalkerTopicManager(const std::shared_ptr<MessageGenerator> ptr_message_generator, const unsigned int message_num)
       : message_generator_(ptr_message_generator)
   {
-    talker_topic_list_.reserve(message_num);
+    for (unsigned int i = 0; i < message_num; i++) {
+      talker_topic_list_.emplace_back(TalkerTopic());
+    }
   }
 
   void TalkerTopicManager::register_message_generator(const std::shared_ptr<MessageGenerator> message_generator)
@@ -61,7 +63,7 @@ namespace simple_node
       return false;
     }
 
-    if (show_count && add_publish_count_to_message(id)) {
+    if (show_count && !add_publish_count_to_message(id)) {
       return false;
     }
 

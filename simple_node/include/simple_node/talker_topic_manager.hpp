@@ -18,7 +18,6 @@ namespace simple_node
       virtual ~TalkerTopic() = default;
 
       bool create_publisher (rclcpp::Node *node, const std::string &topic_name){
-        ptr_node_ = node;
         try
         {
           publisher_ = node->create_publisher<std_msgs::msg::String>(topic_name, 10);
@@ -55,7 +54,7 @@ namespace simple_node
       }
 
     private:
-      rclcpp::Node::SharedPtr ptr_node_;
+      rclcpp::Node *ptr_node_;
       rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_{nullptr};
       std_msgs::msg::String message_{};
       unsigned int publishing_count_{0};

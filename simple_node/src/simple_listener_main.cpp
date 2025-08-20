@@ -28,7 +28,6 @@ int main(int argc, char * argv[])
   }
 
   auto node = std::make_shared<simple_node::SimpleListener>(node_name, node_config);
-  node->init(node_config);
 
   if (node_config["executor_type"] && node_config["executor_type"].as<std::string>() == "multi_threaded") {
     auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
