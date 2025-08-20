@@ -45,11 +45,12 @@ namespace simple_node
 
       void publish() {
         publisher_->publish(message_);
-        publishing_count_++;
+        increment_count();
       }
 
-      void increment_count() {
+      inline void increment_count() {
         publishing_count_++;
+        publishing_count_ = publishing_count_ & MASK_TO_DIGITS;
       }
 
     private:
@@ -57,9 +58,8 @@ namespace simple_node
       rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_{nullptr};
       std_msgs::msg::String message_{};
       unsigned int publishing_count_{0};
-      static constexpr unsigned int MASK_TO_DIGITS = (0x0001 << 26);
+      static constexpr unsigned int MASK_TO_DIGITS = 0xffffffff ^ (0xffffffff << 26); // this bit mask set limits of counters for 8 digits.
       static constexpr unsigned int SUFFIX_LENGTH = 11u;
-
     };
 
   class TalkerTopicManager
