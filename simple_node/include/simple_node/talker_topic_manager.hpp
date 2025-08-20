@@ -40,8 +40,8 @@ namespace simple_node
         message_.data += suffix;
       }
 
-      void delete_suffix_from_message(const unsigned int suffix_length) {
-        message_.data.resize(message_.data.length() - suffix_length);
+      void delete_suffix_from_message() {
+        message_.data.resize(message_.data.length() - SUFFIX_LENGTH);
       }
 
       void publish() {
@@ -58,7 +58,10 @@ namespace simple_node
       rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_{nullptr};
       std_msgs::msg::String message_{};
       unsigned int publishing_count_{0};
-  };
+      static constexpr unsigned int MASK_TO_DIGITS = (0x0001 << 26);
+      static constexpr unsigned int SUFFIX_LENGTH = 11u;
+
+    };
 
   class TalkerTopicManager
   {
@@ -80,11 +83,10 @@ namespace simple_node
     private:
       bool add_publish_count_to_message(const unsigned int id);
       bool delete_publish_count_from_message(const unsigned int id);
-      
+
 
       std::vector<struct TalkerTopic> talker_topic_list_;
       std::shared_ptr<MessageGenerator> message_generator_;
-      static constexpr unsigned int SUFFIX_LENGTH = 11u;
   };
 }
 

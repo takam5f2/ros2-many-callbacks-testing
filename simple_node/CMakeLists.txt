@@ -19,19 +19,11 @@ set(PUBLIC_INCLUDE_DIRS
   $<INSTALL_INTERFACE:include>
 )
 
-# MessageGenerator 
-add_library(message_generator_lib SHARED src/message_generator.cpp)
-ament_target_dependencies(message_generator_lib
-  std_msgs
-  yaml-cpp
-)
-target_include_directories(message_generator_lib PUBLIC ${PUBLIC_INCLUDE_DIRS})
-
 
 #
 # Talkerライブラリの定義
 #
-add_library(simple_talker_lib SHARED src/simple_talker.cpp src/talker_topic_manager.cpp)
+add_library(simple_talker_lib SHARED src/simple_talker.cpp src/talker_topic_manager.cpp src/message_generator.cpp)
 
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_talker_lib
@@ -40,8 +32,8 @@ ament_target_dependencies(simple_talker_lib
   yaml-cpp
 )
 
-target_link_libraries(simple_talker_lib
-  message_generator_lib)
+target_link_libraries(simple_talker_lib)
+
 
 
 # インクルードディレクトリを指定
@@ -99,7 +91,7 @@ if(BUILD_TESTING)
     test/test_message_generator.cpp
   )
   target_link_libraries(test_message_generator
-    message_generator_lib
+    simple_talker_lib
     yaml-cpp
   )  
 

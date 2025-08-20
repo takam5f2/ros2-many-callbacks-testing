@@ -38,7 +38,7 @@ SimpleTalker::~SimpleTalker()
 
 int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed)
 {
-  if (ptr_talker_topic_manager != nullptr) {
+  if (ptr_talker_topic_manager_ != nullptr) {
     return -1; // Already initialized
   }
 
@@ -51,7 +51,7 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
     return -1;
   }
 
-  ptr_talker_topic_manager = std::make_shared<TalkerTopicManager>(ptr_message_generator, config["callbacks"].size());
+  ptr_talker_topic_manager_ = std::make_shared<TalkerTopicManager>(ptr_message_generator, config["callbacks"].size());
 
 
   unsigned int callback_idx = 0;
@@ -61,18 +61,18 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
     auto launch = cb_config["launch"].as<bool>(true);
 
     // message will be reserved even if launch is false because the implementation is easier.
-    ptr_talker_topic_manager->generate_message(callback_idx, cb_config);
+    ptr_talker_topic_manager_->generate_message(callback_idx, cb_config);
 
     if (launch) {
       auto topic = cb_config["topic"].as<std::string>("/unnamed/message");
       bool show_count = cb_config["show_counter"].as<bool>(true);
 
-      ptr_talker_topic_manager->create_publisher(callback_idx, this, topic);
+      ptr_talker_topic_manager_->create_publisher(callback_idx, this, topic);
 
       // defining the timer callback.
       auto timer_callback = [this, callback_idx, show_count]() -> void
       {
-        ptr_talker_topic_manager->publish_buffered_message(callback_idx, show_count);
+        ptr_talker_topic_manager_->publish_buffered_message(callback_idx, show_count);
       };
 
       auto timer = this->create_wall_timer(
@@ -89,7 +89,7 @@ int SimpleTalker::init(const YAML::Node &config, const unsigned int &random_seed
 
       auto timer_callback = [this, callback_idx]() -> void
       {
-        ptr_talker_topic_manager->increment_publishing_count(callback_idx);
+        ptr_talker_topic_manager_->increment_publishing_count(callback_idx);
       };
 
       auto timer = this->create_wall_timer(

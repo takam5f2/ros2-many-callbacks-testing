@@ -52,7 +52,7 @@ namespace simple_node
     {
       return false;
     }
-    talker_topic_list_[id].delete_suffix_from_message(SUFFIX_LENGTH);
+    talker_topic_list_[id].delete_suffix_from_message();
     return false;
   }
 

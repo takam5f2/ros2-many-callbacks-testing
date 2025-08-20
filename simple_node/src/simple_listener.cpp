@@ -16,7 +16,7 @@ SimpleListener::SimpleListener(const std::string &default_node_name, const YAML:
     RCLCPP_INFO(this->get_logger(), "Intra-process communication is enabled for node '%s'.", node_name.c_str());
   }
 
-  if (config["callbacks"] && config["callbacks"].IsSequence()) {
+  if ( config["callbacks"] && config["callbacks"].IsSequence() ) {
     init(config);
   }
 }

@@ -22,7 +22,7 @@ namespace simple_node
     int init(const YAML::Node &config, const unsigned int &random_seed = 0);
     
   private:
-    std::shared_ptr<TalkerTopicManager> ptr_talker_topic_manager{nullptr};
+    std::shared_ptr<TalkerTopicManager> ptr_talker_topic_manager_{nullptr};
 
     // Multiple timers for different IDs by std::vector
     std::vector<rclcpp::TimerBase::SharedPtr> timers_{};
