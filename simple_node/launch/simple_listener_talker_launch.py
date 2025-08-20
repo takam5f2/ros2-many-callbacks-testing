@@ -9,13 +9,11 @@ from launch_ros.actions import Node
 # contextオブジェクトを介してLaunchの引数にアクセスできます
 def launch_setup(context, *args, **kwargs):
     
-    # 1. LaunchConfigurationからYAMLファイルのパスを取得
     config_file_path = LaunchConfiguration('node_config_file').perform(context)
-    random_seed = LaunchConfiguration('random_seed').perform(context)
-
-    # 2. YAMLファイルを読み込む
     with open(config_file_path, 'r') as file:
         config = yaml.safe_load(file)
+
+    random_seed = LaunchConfiguration('random_seed').perform(context)
 
 
     """
@@ -27,7 +25,7 @@ def launch_setup(context, *args, **kwargs):
         - topic: /topic/message/name1
     b_node:...
     """
-    # 3. 読み込んだ設定から Node オブジェクトのリストを生成
+    # 読み込んだ設定から Node オブジェクトのリストを生成
     nodes_to_launch = []
     for node_name, node_info in config.items():
 
@@ -54,7 +52,6 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     
-    # 処理するYAMLファイルパスを受け取るための引数を宣言
     package_share_dir = get_package_share_directory('simple_node')
     default_config_path = package_share_dir + '/config/node_settings.yaml'
     config_file_arg = DeclareLaunchArgument(

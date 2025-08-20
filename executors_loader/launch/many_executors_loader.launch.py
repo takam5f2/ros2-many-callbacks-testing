@@ -7,7 +7,7 @@ from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
 
-def get_component_container(executor_name, executor_property, config_file_path):
+def get_component_container(executor_name, executor_property, config_file_path, random_seed):
   # executor_propertyからスレッド数と実行可能ファイルを取得
   thread_num = 0
   executable = 'component_container'
@@ -40,6 +40,7 @@ def get_component_container(executor_name, executor_property, config_file_path):
                 name=node_name,
                 namespace=executor_name,
                 parameters=[{'node_config_file': config_file_path,
+                             'random_seed' : int(random_seed),
                              'executor_name': executor_name},
                              ],
                 extra_arguments=[{'use_intra_process_comms': intra_process}],
@@ -59,14 +60,11 @@ def get_component_container(executor_name, executor_property, config_file_path):
 
 def launch_setup(context, *args, **kwargs):
     
-    # 1. LaunchConfigurationからYAMLファイルのパスを取得
     config_file_path = LaunchConfiguration('executor_config_file').perform(context)
-
-
-    # 2. YAMLファイルを読み込む
     with open(config_file_path, 'r') as file:
         config = yaml.safe_load(file)
 
+    random_seed = LaunchConfiguration('random_seed').perform(context)
 
     """
     a_node:
@@ -90,12 +88,12 @@ def launch_setup(context, *args, **kwargs):
                   package='executors_loader',
                   executable='executors_loader',
                   namespace=executor_name,
-                  arguments=[executor_name, config_file_path],
+                  arguments=[executor_name, config_file_path, random_seed],
                   output='screen',
               )
           )
         else:
-          component_container_to_launch.append(get_component_container(executor_name, executor_property, config_file_path))
+          component_container_to_launch.append(get_component_container(executor_name, executor_property, config_file_path, random_seed))
 
     executors_to_launch.extend(component_container_to_launch)
 
@@ -114,11 +112,18 @@ def generate_launch_description():
         description='Nodes to launch, described in a YAML file.'
     )
 
+    random_seed_arg = DeclareLaunchArgument(
+        'random_seed',
+        default_value='0',
+        description='Random seed to feed. default value means no use of random seed.'
+    )
+
     # OpaqueFunctionを使って、Launch実行時に上記のlaunch_setup関数を呼び出す
     # これにより、ユーザーが指定したファイルパスに基づいて動的に処理できる
     executor_loader_launch = OpaqueFunction(function=launch_setup)
 
     return LaunchDescription([
         config_file_arg,
+        random_seed_arg,
         executor_loader_launch
     ])
