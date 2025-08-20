@@ -44,7 +44,6 @@ target_include_directories(simple_talker_lib PUBLIC  ${PUBLIC_INCLUDE_DIRS})
 # Talker実行可能ファイルの定義
 #
 add_executable(simple_talker src/simple_talker_main.cpp)
-target_compile_options(simple_talker PRIVATE -g)
 
 # amentパッケージへの依存関係を指定
 ament_target_dependencies(simple_talker
