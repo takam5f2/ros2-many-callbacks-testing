@@ -67,25 +67,25 @@ mixed_talker:
     - topic: /topic/message/mixed/as_is/name0
       frequency: 10
       message_pattern: 0 # as-is
-      message: "This is a mixed message with no pattern"
+      message: "This is a mixed message with no pattern. "
     - topic: /topic/message/mixed/repeat/name0
       frequency: 10
       message_pattern: 1 # repeat
       message_bytes: 1024 # size of the message in bytes
-      message: "This is a mixed message"
+      message: "This is a mixed repeated message. "
     - topic: /topic/message/mixed/random/name0
       frequency: 10
       message_pattern: 2 # random
-      message_bytes: 2048 #
+      message_bytes: 2048 # size of the message in bytes
 
 mixed_listener:
   type: listener
   executor_type: multi_threaded
   silent: true
   callbacks:
-    - topic: /topic/message/mixed/name0
-    - topic: /topic/message/mixed/name1
-    - topic: /topic/message/mixed/name2
+    - topic: /topic/message/mixed/as_is/name0
+    - topic: /topic/message/mixed/repeat/name0
+    - topic: /topic/message/mixed/random/name0
 
 
 # hard rock band talkers and listeners
