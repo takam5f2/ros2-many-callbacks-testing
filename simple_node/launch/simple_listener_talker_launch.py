@@ -11,7 +11,7 @@ def launch_setup(context, *args, **kwargs):
     
     # 1. LaunchConfigurationからYAMLファイルのパスを取得
     config_file_path = LaunchConfiguration('node_config_file').perform(context)
-
+    random_seed = LaunchConfiguration('random_seed').perform(context)
 
     # 2. YAMLファイルを読み込む
     with open(config_file_path, 'r') as file:
@@ -42,7 +42,7 @@ def launch_setup(context, *args, **kwargs):
                 package='simple_node',
                 executable=node_type,
                 name=node_name,
-                arguments=[node_name, config_file_path],
+                arguments=[node_name, config_file_path, random_seed],
                 output='screen',
             )
         )
@@ -63,11 +63,18 @@ def generate_launch_description():
         description='Nodes to launch, described in a YAML file.'
     )
 
+    random_seed_arg = DeclareLaunchArgument(
+        'random_seed',
+        default_value='0',
+        description='Random seed to feed. default value means no use of random seed.'
+    )
+
     # OpaqueFunctionを使って、Launch実行時に上記のlaunch_setup関数を呼び出す
     # これにより、ユーザーが指定したファイルパスに基づいて動的に処理できる
     dynamic_nodes = OpaqueFunction(function=launch_setup)
 
     return LaunchDescription([
         config_file_arg,
+        random_seed_arg,
         dynamic_nodes
     ])
