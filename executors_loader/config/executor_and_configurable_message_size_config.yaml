@@ -1,0 +1,133 @@
+normal_executor_00:
+  use_composable_nodes: false
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 0 # as-is
+        message_bytes: 0 # this value must not be used.
+        message: "Hello from name0"
+  - node_name: "simple_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/message/name0
+
+
+repeated_executor_01:
+  use_composable_nodes: false
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "repeating_message_simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/repeated/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 1 # repeat
+        message_bytes: 1048576 # 1MByte
+        message: "Hello from repeating talker."
+  - node_name: "repeating_message_simple_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/repeated/message/name0
+
+random_executor_02:
+  use_composable_nodes: false
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "random_message_simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/random/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 2 # random
+        message_bytes: 1048576 # 1MByte
+        message: "Hello from random talker."
+  - node_name: "repeating_message_simple_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/random/message/name0
+
+mixed_executor_03:
+  use_composable_nodes: false
+  executor_type: "single_threaded_executor"
+  nodes:
+  - node_name: "mixed_message_simple_talker"
+    node_type: simple_talker
+    intra_process: false
+    callbacks:
+      - topic: /topic/mixed/normal/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 0
+        message: "I am normal message publisher in mixed talker."
+      - topic: /topic/mixed/repeated/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 1
+        message_bytes: 524288 # 500KBytes
+        message: "I am random message publisher in mixed talker."
+      - topic: /topic/mixed/random/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 2
+        message_bytes: 524288 # 500KBytes
+        message: "I am random message publisher in mixed talker."
+  - node_name: "mixed_message_simple_listener"
+    node_type: simple_listener
+    intra_process: false
+    silent: true
+    callbacks:
+      - topic: /topic/mixed/normal/message/name0
+      - topic: /topic/mixed/repeated/message/name0
+      - topic: /topic/mixed/random/message/name0
+
+# Testing for MultiThreaded and Intra-process Comms.
+multithreaded_mixed_executor_04:
+  use_composable_nodes: false
+  executor_type: "multi_threaded_executor"
+  nodes:
+  - node_name: "multi_mixed_message_simple_talker"
+    node_type: simple_talker
+    intra_process: true
+    callbacks:
+      - topic: /topic/multi/mixed/normal/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 0 # repeat
+        message: "I am normal message publisher in mixed talker via intra and multi."
+      - topic: /topic/multi/mixed/repeated/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 1 # repeat
+        message_bytes: 524288 # 500KBytes
+        message: "I am random message publisher in mixed talker via intra and multi."
+      - topic: /topic/multi/mixed/random/message/name0
+        frequency: 10
+        launch: true
+        message_pattern: 2 # repeat
+        message_bytes: 524288 # 500KBytes
+        message: "I am random message publisher in mixed talker via intra and multi."
+  - node_name: "multi_mixed_message_simple_listener"
+    node_type: simple_listener
+    intra_process: true
+    silent: true
+    callbacks:
+      - topic: /topic/multi/mixed/normal/message/name0
+      - topic: /topic/multi/mixed/repeated/message/name0
+      - topic: /topic/multi/mixed/random/message/name0
+
