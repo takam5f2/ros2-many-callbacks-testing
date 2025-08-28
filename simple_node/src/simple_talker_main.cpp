@@ -14,6 +14,15 @@ int main(int argc, char * argv[])
   std::string node_name = argv[1];
   std::string yaml_path = argv[2];
 
+  unsigned int random_seed = 0;
+  if (argc > 3) {
+    try {
+      random_seed = std::stoi(argv[3]);
+    } catch (const std::invalid_argument &e) {
+      random_seed = 0; // Default to 0 if conversion fails
+    }
+  }
+
   YAML::Node config = YAML::LoadFile(yaml_path);
   
   YAML::Node node_config = config[node_name];
@@ -27,7 +36,7 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  auto node = std::make_shared<simple_node::SimpleTalker>(node_name, node_config);
+  auto node = std::make_shared<simple_node::SimpleTalker>(node_name, node_config, random_seed);
 
   
   if (node_config["executor_type"] && node_config["executor_type"].as<std::string>() == "multi_threaded") {

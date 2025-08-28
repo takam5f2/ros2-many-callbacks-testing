@@ -45,6 +45,15 @@ namespace composable_simple_node
       throw;
     }
   }
+
+  unsigned int get_random_seed(rclcpp::Node* node)
+  {
+    int seed = 0;
+    node->declare_parameter<int>("random_seed", 0);
+    node->get_parameter("random_seed", seed);
+    return static_cast<unsigned int>(seed);
+  }
 }
+
 
 #endif // __COMPOSABLE_SIMPLE_NODE_HELPER_HPP__

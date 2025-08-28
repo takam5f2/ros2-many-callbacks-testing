@@ -12,9 +12,9 @@ class ComposableSimpleTalker : public simple_node::SimpleTalker
 {
 public:
   explicit ComposableSimpleTalker(const rclcpp::NodeOptions &options): 
-    SimpleTalker("simple_talker", YAML::Node(), options)
+    SimpleTalker("simple_talker", YAML::Node(), 0, options)
   {
-    init(load_yaml_config(this));
+    init(load_yaml_config(this), get_random_seed(this));
   }
 };
 } // namespace composable_simple_node
