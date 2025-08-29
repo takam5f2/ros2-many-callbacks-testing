@@ -18,7 +18,7 @@ namespace simple_node
       TalkerTopic talker_topic;
 
       talker_topic.set_launch(cb_config["launch"].as<bool>(true));
-      talker_topic.set_show_count(cb_config["show_config"].as<bool>(true));
+      talker_topic.set_show_count(cb_config["show_count"].as<bool>(false));
 
       if (talker_topic.check_launch()) {
         std::string topic_name = cb_config["topic"].as<std::string>("/topic/no_name/message0");
