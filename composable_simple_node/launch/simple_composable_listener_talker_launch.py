@@ -10,13 +10,11 @@ from launch_ros.descriptions import ComposableNode
 # contextオブジェクトを介してLaunchの引数にアクセスできます
 def launch_setup(context, *args, **kwargs):
     
-    # 1. LaunchConfigurationからYAMLファイルのパスを取得
     node_config_file = LaunchConfiguration('node_config_file').perform(context)
-
-    # 2. YAMLファイルを読み込む
     with open(node_config_file, 'r') as file:
         config = yaml.safe_load(file)
 
+    random_seed = LaunchConfiguration('random_seed').perform(context)
 
     """
     a_node:
@@ -27,7 +25,7 @@ def launch_setup(context, *args, **kwargs):
         - topic: /topic/message/name1
     b_node:...
     """
-    # 3. 読み込んだ設定から Node オブジェクトのリストを生成
+    # 読み込んだ設定から Node オブジェクトのリストを生成
     nodes_to_launch = []
     for node_name, node_info in config.items():
 
@@ -47,12 +45,14 @@ def launch_setup(context, *args, **kwargs):
                 plugin=plugin,
                 name=node_name,
                 parameters=[
-                    {'node_config_file': node_config_file},
+                    {'node_config_file': node_config_file,
+                     'random_seed': int(random_seed),
+                     },
                 ],
             )
         )
 
-    # 4. ComposableNodeContainerを作成し、上記のノードを登録
+    # ComposableNodeContainerを作成し、上記のノードを登録
     container = ComposableNodeContainer(
         name='simple_composable_container',
         namespace='',
@@ -68,7 +68,6 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     
-    # 処理するYAMLファイルパスを受け取るための引数を宣言
     package_share_dir = get_package_share_directory('simple_node')
     default_config_path = package_share_dir + '/config/node_settings.yaml'
     config_file_arg = DeclareLaunchArgument(
@@ -77,11 +76,19 @@ def generate_launch_description():
         description='Nodes to launch, described in a YAML file.'
     )
 
+
+    random_seed_arg = DeclareLaunchArgument(
+        'random_seed',
+        default_value='0',
+        description='Random seed to feed. default value means no use of random seed.'
+    )
+
     # OpaqueFunctionを使って、Launch実行時に上記のlaunch_setup関数を呼び出す
     # これにより、ユーザーが指定したファイルパスに基づいて動的に処理できる
     dynamic_nodes = OpaqueFunction(function=launch_setup)
 
     return LaunchDescription([
         config_file_arg,
+        random_seed_arg,
         dynamic_nodes
     ])
