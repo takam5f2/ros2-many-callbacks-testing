@@ -52,31 +52,32 @@ ROS2_PID=$!
 # 起動が完了するまで待機しつつ、CPU使用率のログを取る
 python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}_${TOPIC_SIZE}BytePerSec.csv
 
-echo ">>> VTuneによるプロファイリングを開始します (Duration: 10s)..."
-source /opt/intel/oneapi/setvars.sh
-vtune -collect hotspots \
-      -finalization-mode=full \
-      -knob sampling-mode=hw \
-      -knob enable-stack-collection=false \
-      -knob stack-size=4096 \
-      -knob enable-characterization-insights=false \
-      -data-limit 10000 \
-      -duration 10 \
-      -analyze-system \
-      -result-dir $RES_DIR
+#### Vtuneによるプロファイリングをスキップ ####
+# echo ">>> VTuneによるプロファイリングを開始します (Duration: 10s)..."
+# source /opt/intel/oneapi/setvars.sh
+# vtune -collect hotspots \
+#       -finalization-mode=full \
+#       -knob sampling-mode=hw \
+#       -knob enable-stack-collection=false \
+#       -knob stack-size=4096 \
+#       -knob enable-characterization-insights=false \
+#       -data-limit 10000 \
+#       -duration 10 \
+#       -analyze-system \
+#       -result-dir $RES_DIR
 
-echo ">>> プロファイリングが完了しました。レポートを生成します..."
-vtune -report hotspots \
-      -result-dir $RES_DIR \
-      -format=csv \
-      -report-output $RES_DIR/hotspots_report.csv
-vtune -report hotspots \
-      -result-dir $RES_DIR \
-      -format=csv \
-      -group-by=process \
-      -report-output $RES_DIR/process_report.csv
+# echo ">>> プロファイリングが完了しました。レポートを生成します..."
+# vtune -report hotspots \
+#       -result-dir $RES_DIR \
+#       -format=csv \
+#       -report-output $RES_DIR/hotspots_report.csv
+# vtune -report hotspots \
+#       -result-dir $RES_DIR \
+#       -format=csv \
+#       -group-by=process \
+#       -report-output $RES_DIR/process_report.csv
 
-echo ">>> 完了: レポートは $RES_DIR/hotspots_report.csv に保存されました。"
+# echo ">>> 完了: レポートは $RES_DIR/hotspots_report.csv に保存されました。"
 
 # 起動したROS2のプロセスを終了
 pkill -g ${ROS2_PID}
