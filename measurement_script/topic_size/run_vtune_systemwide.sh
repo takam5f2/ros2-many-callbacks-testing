@@ -50,7 +50,7 @@ ros2 launch simple_node simple_listener_talker_launch.py node_config_file:=confi
 ROS2_PID=$!
 
 # 起動が完了するまで待機しつつ、CPU使用率のログを取る
-python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}_${TOPIC_SIZE}BytePerSec.csv
+python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_topic_num_${NODE_NUM}_${TOPIC_SIZE}BytePerSec.csv
 
 #### Vtuneによるプロファイリングをスキップ ####
 # echo ">>> VTuneによるプロファイリングを開始します (Duration: 10s)..."
