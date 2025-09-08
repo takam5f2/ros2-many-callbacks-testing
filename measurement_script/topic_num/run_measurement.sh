@@ -30,7 +30,7 @@ mkdir -p result
 
 # --- 変数設定 ---
 # 第1引数をNODE_NUMとして使用する
-RES_DIR="result/vtune_hs_system_wide_node_num_${NODE_NUM}_topic_num_per_node_${TOPIC_FREQUENCY}"
+RES_DIR="result/vtune_hs_system_wide_node_num_${NODE_NUM}_topic_num_per_node_${TOPIC_NUM}"
 
 # 既存のディレクトリがあれば削除するか、ユーザーに確認する（オプション）
 if [ -d "$RES_DIR" ]; then
@@ -50,7 +50,7 @@ ros2 launch simple_node simple_listener_talker_launch.py node_config_file:=confi
 ROS2_PID=$!
 
 # 起動が完了するまで待機しつつ、CPU使用率のログを取る
-python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}_topic_num_per_node_${TOPIC_FREQUENCY}.csv
+python3 wait_until_cpu_usage_got_low.py > result/cpu_usage_log_node_num_${NODE_NUM}_topic_num_per_node_${TOPIC_NUM}.csv
 
 # 起動したROS2のプロセスを終了
 pkill -g ${ROS2_PID}
